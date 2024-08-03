@@ -4,4 +4,4 @@ app=Flask(__name__)                 #Flaskクラスのインスタンスを作�
 
 @app.route("/")                     #routeデコレータを使ってどのURLが関数の引き金になるのかを伝える
 def hello_world():                  
-    return "<p>testtestaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>"
+    return "<p>testtestaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>"
