@@ -2,10 +2,19 @@ from flask import Flask, redirect, render_template
 from flask import request
 from markupsafe import Markup
 import os, time
+import mysql.connector
 import sns_user as user, sns_data as data
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
+
+db = mysql.connector.connect(
+    host = "localhost",
+    user = "root",
+    password = "o#H5dGr7q8Fp",
+    database = "haikusns"
+)
+
 app.secret_key = 'TIIDe5TUMtPUHpyu'
 
 # --- URLのルーティング --- (*1)
