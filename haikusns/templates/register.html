@@ -13,17 +13,17 @@
     <div class="register-container">
       <h2>ユーザ登録</h2>
       <form action="/register" method="post">
-        <input type="text" name="username" placeholder="ユーザー名" required />
-        <input
-          type="email"
-          name="email"
-          placeholder="メールアドレス"
-          required
-        />
+        <input type="text" name="username" placeholder="ユーザ名" required />
         <input
           type="password"
           name="password"
           placeholder="パスワード"
+          required
+        />
+        <input
+          type="password"
+          name="password_confirm"
+          placeholder="パスワード確認"
           required
         />
         <button type="submit">登録</button>
