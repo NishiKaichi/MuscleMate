@@ -1,13 +1,6 @@
 {% extends "layout.html" %}
 
-{% block add_stylesheet %}<!--cssの追加-->
-<link rel="stylesheet" href="/static/side-menu.css" />
-{% endblock %}
-
 {% block header %}
-<div class="header">
-  <h1>俳句SNS</h1>
-</div>
 <!-- ハンバーガーアイコン -->
 <a href="#menu" id="menuLink" class="menu-link">
     <span></span>
@@ -30,9 +23,7 @@
 </div>
 </div>
 {% endblock %}
-{% block footer %}
-<p class="footer"><a href="/" class="pure-button">トップページへ</a></p>        
-{% endblock %}
+
 {% block footer_script %}
 <script src="/static/ui.js"></script>
 {% endblock %}

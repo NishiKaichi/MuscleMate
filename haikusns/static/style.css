@@ -80,9 +80,9 @@ body {
 }
 
 h1 {
-  background-color: #f0f0f0;
+  background-color: white;
   color: brown;
-  padding: 8px 8px 8px 8px;
+  padding: 8px 8px 8px 24px;
   margin: 8px;
 }
 
@@ -147,7 +147,7 @@ h3 {
 }
 
 #loginform {
-  padding: 4px 8px 4px 8px;
+  padding: 4px 8px 4px 12px;
 }
 
 textarea {
@@ -157,29 +157,3 @@ textarea {
 .footer {
   text-align: center;
 }
-
-.boxes {
-  display: flex;
-  gap: 20px; /* 子要素間の間隔を20pxに設定 */
-  justify-content: space-between; /* 子要素間の空白を均等に設定 */
-}
-.boxes > .header {
-  margin-right: 20px; /* 右側の間隔を20pxに設定 */
-}
-
-.boxes > .login-container {
-  margin-left: 20px; /* 左側の間隔を20pxに設定 */
-}
-
-.logo{
-  margin: 0;
-  color: #333;
-  text-align: center;
-  padding: 2.5em 2em 0;
-  border-bottom: 1px solid #eee;
-}
-  .logo h1 {
-      margin: 0.2em 0;
-      font-size: 3em;
-      font-weight: 300;
-  }

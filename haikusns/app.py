@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, flash, session
+from flask import Flask, redirect, render_template, request
 from markupsafe import Markup
 import os, time
 from datetime import datetime
@@ -6,6 +6,7 @@ import sns_user as user, sns_data as data
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
+
 app.secret_key = 'TIIDe5TUMtPUHpyu'
 
 
@@ -19,48 +20,67 @@ def index():
             fav_users=data.get_fav_list(me),
             timelines=data.get_timelines(me))
 
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
-    if request.method == 'POST':
-        if user.try_login(request.form):
-            return redirect('/')
-        flash("ログインに失敗しました")
     return render_template('login_form.html')
 
 @app.route('/login/try', methods=['POST'])
 def login_try():
-    if user.try_login(request.form):
-        return redirect('/')
-    flash("ログインに失敗しました")
-    return redirect('/login')
+    ok = user.try_login(request.form)
+    if not ok: return msg('ログインに失敗しました')
+    return redirect('/')
 
-#,ログアウト処理
 @app.route('/logout')
 def logout():
     user.try_logout()
-    return redirect('/login')
+    return msg('ログアウトしました')
 
-#ユーザー登録処理
+@app.route('/users/<user_id>')
+@user.login_required
+def users(user_id):
+    if user_id not in user.USER_LOGIN_LIST:
+        return msg('ユーザーが存在しません')
+    me = user.get_id()
+    return render_template('users.html',
+            user_id=user_id, id=me,
+            is_fav=data.is_fav(me, user_id),
+            text_list=data.get_text(user_id))
+
+@app.route('/fav/add/<user_id>')
+@user.login_required
+def fav_add(user_id):
+    data.add_fav(user.get_id(), user_id)
+    return redirect('/users/' + user_id)
+
+@app.route('/fav/remove/<user_id>')
+@user.login_required
+def remove_fav(user_id):
+    data.remove_fav(user.get_id(), user_id)
+    return redirect('/users/' + user_id)
+
+@app.route('/write')
+@user.login_required
+def write():
+    return render_template('write_form.html', id=user.get_id())
+
+@app.route('/write/try', methods=['POST'])
+@user.login_required
+def try_write():
+    text = request.form.get('text', '')
+    if text == '': return msg('テキストが空です。')
+    data.write_text(user.get_id(), text)
+    return redirect('/')
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """ユーザー登録処理"""
     if request.method == 'POST':
+        # ユーザ登録処理をここに追加
         username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        confirm_password = request.form['re_password']
-
-        if password != confirm_password:
-            error_message = 'パスワードが一致しません。もう一度入力してください。'
-            return render_template('register.html', error_message=error_message, username=username)
-
-        if not user.create_user(username, password):
-            error_message = 'このユーザー名は既に使用されています。'
-            return render_template('register.html', error_message=error_message, username='')
-
-        flash('ユーザー登録が完了しました。')
+        ok= user.create_user(username, email, password)
+        if not ok: return msg('ユーザ登録に失敗しました')
         return redirect('/login')
-
     return render_template('register.html')
 
 #お気に入り追加処理
@@ -104,12 +124,12 @@ def add_staticfile():
 
 def staticfile_cp(fname):
     path = os.path.join(app.root_path, 'static', fname)
-    mtime = str(int(os.stat(path).st_mtime))
+    mtime =  str(int(os.stat(path).st_mtime))
     return '/static/' + fname + '?v=' + str(mtime)
 
 # 改行を有効にするフィルタを追加
 @app.template_filter('linebreak')
-def linebreak_filter(s):
+def linebreak_fiter(s):
     s = s.replace('&', '&amp;').replace('<', '&lt;') \
          .replace('>', '&gt;').replace('\n', '<br>')
     return Markup(s)

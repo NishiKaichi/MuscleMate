@@ -1,58 +1,41 @@
-from flask import session, redirect
+# ログインなどユーザーに関する処理をまとめた
+from flask import Flask, session, redirect
 from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
 
-def get_db_connection():
-    """データベース接続を取得する"""
-    conn = sqlite3.connect('data.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+# ユーザー名とパスワードの一覧 --- (*1)
+USER_LOGIN_LIST = {
+    'taro': 'aaa',
+    'jiro': 'bbb',
+    'sabu': 'ccc',
+    'siro': 'ddd',
+    'goro': 'eee', 
+    'muro': 'fff' }
 
-def create_user(username, password):
-    """ユーザーを作成する"""
-    password_hash = generate_password_hash(password)
-    try:
-        conn = get_db_connection()
-        conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password_hash))
-        conn.commit()
-        conn.close()
-        return True
-    except sqlite3.IntegrityError:
-        return False
-
+# ログインしているかの確認 --- (*2)
 def is_login():
-    """ログイン状態をチェックする"""
     return 'login' in session
 
+# ログインを試行する --- (*3)
 def try_login(form):
-    """ログインを試みる"""
-    username = form.get('username', '')
-    password = form.get('password', '')
-
-    conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
-    conn.close()
-
-    if user is None or not check_password_hash(user['password'], password):
+    user = form.get('user', '')
+    password = form.get('pw', '')
+    # パスワードチェック
+    if user not in USER_LOGIN_LIST: return False
+    if USER_LOGIN_LIST[user] != password:
         return False
-
-    session['login'] = user['id']
+    session['login'] = user
     return True
 
+# ユーザー名を得る --- (*4)
 def get_id():
-    """ログイン中のユーザーIDを取得する"""
-    return session['login'] if is_login() else None
+    return session['login'] if is_login() else '未ログイン'
 
+# 全ユーザーの情報を得る --- (*5)
 def get_allusers():
-    """全ユーザーを取得する"""
-    conn = get_db_connection()
-    users = conn.execute('SELECT * FROM users').fetchall()
-    conn.close()
-    return users
+    return [ u for u in USER_LOGIN_LIST ]
 
+# ログアウトする --- (*6)
 def try_logout():
-    """ログアウト処理"""
     session.pop('login', None)
 
 # ログイン必須を処理するデコレーターを定義 --- (*7)

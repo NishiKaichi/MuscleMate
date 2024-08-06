@@ -1,44 +1,36 @@
-{% extends "layout.html" %}
-{% block title %}ユーザー登録ページ{% endblock %}
-{% block contents %}
-<div class="register-container">
-  <h2>ユーザ登録</h2>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-        {% for message in messages %}
-          <li style="color: red;">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-  {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
-  {% endif %}
-  <form action="/register" method="post">
-    <input 
-      type="text" 
-      name="username" 
-      placeholder="ユーザー名" 
-      value="{{ username }}" 
-      required 
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ユーザ登録ページ</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
     />
-    <input
-      type="password"
-      name="password"
-      placeholder="パスワード"
-      required
-    />
-    <input
-      type="password"
-      name="re_password"
-      placeholder="パスワード(再入力)"
-      required
-    />
-    <button type="submit">登録</button>
-  </form>
-  <div class="login-link">
-    <p>既にアカウントをお持ちですか？ <a href="/login">ログイン</a></p>
-  </div>
-</div>
-{% endblock %}
+  </head>
+  <body>
+    <div class="register-container">
+      <h2>ユーザ登録</h2>
+      <form action="/register" method="post">
+        <input type="text" name="username" placeholder="ユーザ名" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="パスワード"
+          required
+        />
+        <input
+          type="password"
+          name="password_confirm"
+          placeholder="パスワード確認"
+          required
+        />
+        <button type="submit">登録</button>
+      </form>
+      <div class="login-link">
+        <p>既にアカウントをお持ちですか？ <a href="/login">ログイン</a></p>
+      </div>
+    </div>
+  </body>
+</html>
