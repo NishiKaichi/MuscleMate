@@ -17,15 +17,21 @@ def index():
             fav_users=data.get_fav_list(me),
             timelines=data.get_timelines(me))
 
-#ログイン処理
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         if user.try_login(request.form):
             return redirect('/')
-        else:
-            flash('ログインに失敗しました')
+        flash("ログインに失敗しました")
     return render_template('login_form.html')
+
+@app.route('/login/try', methods=['POST'])
+def login_try():
+    if user.try_login(request.form):
+        return redirect('/')
+    flash("ログインに失敗しました")
+    return redirect('/login')
 
 #,ログアウト処理
 @app.route('/logout')
