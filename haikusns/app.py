@@ -76,7 +76,7 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        ok = user.create_user(username, email, password)
+        ok= user.create_user(username, email, password)
         if not ok: return msg('ユーザ登録に失敗しました')
         return redirect('/login')
     return render_template('register.html')
