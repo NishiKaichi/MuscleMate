@@ -1,8 +1,9 @@
+
 {% extends "layout_login.html" %}
 
 {% block contents %}
 
-{# お気に入り登録しているユーザーの一覧を表示 --- (*1) #}
+{# お気に入り登録しているユーザーの一覧を表示 #}
 <div class="box pure-menu-horizontal pure-menu-scrollable">
   お気に入りの作家:
   {% for u in fav_users %}
@@ -10,7 +11,7 @@
   {% endfor %}
 </div>
 
-{# 全てのユーザーの一覧を表示 --- (*2) #}
+{# 全てのユーザーの一覧を表示 #}
 <div class="box pure-menu-horizontal pure-menu-scrollable">
   すべての作家:
   {% for u in users %}
@@ -18,8 +19,7 @@
   {% endfor %}
 </div>
 
-
-{# タイムラインを表示 --- (*3) #}
+{# タイムラインを表示 #}
 <h3>{{ id }}のタイムライン</h3>
 <div class="haiku-list">
 {% if timelines | length == 0 %}
@@ -28,14 +28,12 @@
 {% endif %}
 {% for i in timelines %}
   <div class="haiku">
-    {{ i.text | linebreak }}
+    {{ i.content | linebreak }}
     <p class="info">
-      {{ i.time | datestr }}
-      作: <a href="/users/{{ i.id }}">{{ i.id }} </a></p>
+      {{ i.timestamp | datestr }}
+      作: <a href="/users/{{ i.user_id }}">{{ i.username }}</a></p>
   </div>
 {% endfor %}
 </div>
 
-
 {% endblock %}
-

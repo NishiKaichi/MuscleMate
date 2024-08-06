@@ -64,3 +64,17 @@ def get_timelines(id):
             key=lambda v:v['time'],
             reverse=True) # --- (*14)
 
+def get_timelines(user_id):
+    """タイムラインを取得する"""
+    conn = get_db_connection()
+    haikus = conn.execute('''
+        SELECT haikus.*, users.username
+        FROM haikus
+        JOIN users ON haikus.user_id = users.id
+        WHERE haikus.user_id = ? OR haikus.user_id IN (SELECT fav_id FROM favs WHERE user_id = ?)
+        ORDER BY haikus.timestamp DESC
+    ''', (user_id, user_id)).fetchall()
+    conn.close()
+    print("Timelines:", haikus)  # デバッグ用出力
+    return haikus
+

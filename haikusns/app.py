@@ -1,12 +1,14 @@
 from flask import Flask, redirect, render_template, request
 from markupsafe import Markup
 import os, time
-import sns_user as user, sns_data as data
+from datetime import datetime
+import sns_user as user, sns_data as data   
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
 
 app.secret_key = 'TIIDe5TUMtPUHpyu'
+
 
 # --- URLのルーティング ---
 @app.route('/')
@@ -81,8 +83,39 @@ def register():
         return redirect('/login')
     return render_template('register.html')
 
-def msg(msg):
-    return render_template('msg.html', msg=msg)
+#お気に入り追加処理
+@app.route('/add_fav/<int:fav_id>', methods=['POST'])
+@user.login_required
+def add_fav(fav_id):
+    user_id = user.get_id()
+    data.add_fav(user_id, fav_id)
+    return redirect('/')
+
+#お気に入り削除処理
+@app.route('/remove_fav/<int:fav_id>', methods=['POST'])
+@user.login_required
+def remove_fav(fav_id):
+    user_id = user.get_id()
+    data.remove_fav(user_id, fav_id)
+    return redirect('/')
+
+#俳句投稿処理
+@app.route('/write', methods=['GET'])
+@user.login_required
+def write():
+    return render_template("write_form.html",id=user.get_id())
+
+@app.route("/write/try",methods=["POST"])
+@user.login_required
+def try_write():
+    user_id = user.get_id()
+    print(request.form)
+    content = request.form.get("text","")
+    if content:
+        data.save_haiku(user_id, content)
+    else:
+        print("no text provided")
+    return redirect('/')
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
@@ -103,9 +136,11 @@ def linebreak_fiter(s):
 
 # 日付をフォーマットするフィルタを追加
 @app.template_filter('datestr')
-def datestr_fiter(s):
-    return time.strftime('%Y年%m月%d日',
-    time.localtime(s))
+def datestr_filter(s):
+    dt=datetime.strptime(s,'%Y-%m-%d %H:%M:%S')
+    return time.strftime('%Y年%m月%d日 %H:%M:%S')
+
+app.jinja_env.filters['datestr'] = datestr_filter
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
