@@ -12,18 +12,36 @@
   <body>
     <div class="register-container">
       <h2>ユーザ登録</h2>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+      {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+      {% endif %}
       <form action="/register" method="post">
-        <input type="text" name="username" placeholder="ユーザー名" required />
-        <input
-          type="email"
-          name="email"
-          placeholder="メールアドレス"
-          required
+        <input 
+          type="text" 
+          name="username" 
+          placeholder="ユーザー名" 
+          value="{{ username }}" 
+          required 
         />
         <input
           type="password"
           name="password"
           placeholder="パスワード"
+          required
+        />
+        <input
+          type="password"
+          name="re_password"
+          placeholder="パスワード(再入力)"
           required
         />
         <button type="submit">登録</button>

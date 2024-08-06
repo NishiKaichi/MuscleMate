@@ -1,6 +1,16 @@
-{% extends "layout.html" %} {% block contents %}
+{% extends "layout.html" %} 
+{% block contents %}
 <div id="loginform" class="login-container">
   <h2>ログイン</h2>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li style="color: red;">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
   <form action="/login/try" method="post">
     <input type="text" name="username" placeholder="ユーザー名" required />
     <input type="password" name="password" placeholder="パスワード" required />
