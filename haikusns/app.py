@@ -78,11 +78,19 @@ def remove_fav(fav_id):
     return redirect('/')
 
 #俳句投稿処理
-@app.route('/post_haiku', methods=['POST'])
+@app.route('/write', methods=['GET'])
 @user.login_required
-def post_haiku():
+def write():
+    return render_template("write_form.html",id=user.get_id())
+
+@app.route("/write/try",methods=["POST"])
+@user.login_required
+def try_write():
     user_id = user.get_id()
-    content = request.form['content']
+    content = request.form("content")
+    if content=="":
+        flash("テキストが空です。")
+        return redirect("/write")
     data.save_haiku(user_id, content)
     return redirect('/')
 
