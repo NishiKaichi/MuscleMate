@@ -1,23 +1,31 @@
-{% extends "layout.html" %} 
+{% extends "layout.html" %}
+{% block title %}ログインページ{% endblock %}
 {% block contents %}
-<div id="loginform" class="login-container">
-  <h2>ログイン</h2>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-        {% for message in messages %}
-          <li style="color: red;">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-  <form action="/login/try" method="post">
-    <input type="text" name="username" placeholder="ユーザー名" required />
-    <input type="password" name="password" placeholder="パスワード" required />
-    <button type="submit">ログイン</button>
-  </form>
-  <div class="register-link">
-    <p>アカウントをお持ちでないですか？ <a href="/register">ユーザ登録</a></p>
+<div class="boxes">
+  <div class="logo">
+    <h1>俳句SNS</h1>
   </div>
+  <div id="loginform" class="login-container">
+    <h2>ログイン</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li style="color: red;">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form action="/login/try" method="post">
+      <input type="text" name="username" placeholder="ユーザー名" required />
+      <input type="password" name="password" placeholder="パスワード" required />
+      <button type="submit">ログイン</button>
+    </form>
+    <div class="register-link">
+      <p>アカウントをお持ちでないですか？ <a href="/register">ユーザ登録</a></p>
+    </div>
+  </div><!-- loginform　login-container -->
 </div>
 {% endblock %}
+
+
