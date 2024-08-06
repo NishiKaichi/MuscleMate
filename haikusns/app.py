@@ -1,11 +1,13 @@
 from flask import Flask, redirect, render_template, request, flash, session
 from markupsafe import Markup
 import os, time
+from datetime import datetime
 import sns_user as user, sns_data as data   
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
 app.secret_key = 'TIIDe5TUMtPUHpyu'
+
 
 # --- URLのルーティング ---
 @app.route('/')
@@ -87,11 +89,12 @@ def write():
 @user.login_required
 def try_write():
     user_id = user.get_id()
-    content = request.form("content")
-    if content=="":
-        flash("テキストが空です。")
-        return redirect("/write")
-    data.save_haiku(user_id, content)
+    print(request.form)
+    content = request.form.get("text","")
+    if content:
+        data.save_haiku(user_id, content)
+    else:
+        print("no text provided")
     return redirect('/')
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
@@ -114,6 +117,10 @@ def linebreak_filter(s):
 # 日付をフォーマットするフィルタを追加
 @app.template_filter('datestr')
 def datestr_filter(s):
-    return time.strftime('%Y年%m月%d日', time.localtime(s))
+    dt=datetime.strptime(s,'%Y-%m-%d %H:%M:%S')
+    return time.strftime('%Y年%m月%d日 %H:%M:%S')
+
+app.jinja_env.filters['datestr'] = datestr_filter
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

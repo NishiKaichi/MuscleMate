@@ -52,4 +52,6 @@ def get_timelines(user_id):
         ORDER BY haikus.timestamp DESC
     ''', (user_id, user_id)).fetchall()
     conn.close()
+    print("Timelines:", haikus)  # デバッグ用出力
     return haikus
+
