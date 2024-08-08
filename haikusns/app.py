@@ -19,7 +19,7 @@ def index():
             username = user.get_username(me),
             users=user.get_allusers(),
             fav_users=data.get_fav_list(me),
-            timelines=data.get_timelines(me))
+            timelines=data.get_timelines(me),user_id=me)
 
 
 @app.route('/login', methods=['GET', 'POST'])
