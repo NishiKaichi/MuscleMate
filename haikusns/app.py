@@ -4,11 +4,16 @@ import os, time
 import sqlite3
 from datetime import datetime
 import sns_user as user, sns_data as data   
+from werkzeug.utils import secure_filename
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
 app.secret_key = 'TIIDe5TUMtPUHpyu'
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # --- URLのルーティング ---
 @app.route('/')
@@ -99,17 +104,30 @@ def write():
     user_id = user.get_id()
     return render_template("write_form.html", user_id=user_id)
 
-@app.route("/write/try",methods=["POST"])
+@app.route('/write/try', methods=['POST'])
 @user.login_required
 def try_write():
     user_id = user.get_id()
-    print(request.form)
-    content = request.form.get("text","")
-    if content:
-        data.save_haiku(user_id, content)
+    text = request.form.get("text", "")
+    file = request.files.get('image')
+    filename = None
+    if file:
+        print(f"File received: {file.filename}")  # デバッグ用出力
+        if allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(f"Image saved as: {filename}")  # デバッグ用出力
+        else:
+            print("Invalid file type")  # デバッグ用出力
     else:
-        print("no text provided")
+        print("No file received")  # デバッグ用出力
+    if text:
+        data.save_haiku(user_id, text, filename)
+        print(f"Haiku saved with image: {filename}")  # デバッグ用出力
+    else:
+        print("No text provided")  # デバッグ用出力
     return redirect('/')
+
 
 @app.route('/users/<int:user_id>')
 @user.login_required
@@ -153,4 +171,6 @@ app.jinja_env.filters['datestr'] = datestr_filter
 app.jinja_env.filters['linebreaks'] = linebreaks_filter
 
 if __name__ == '__main__':
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True, host='0.0.0.0')

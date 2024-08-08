@@ -37,6 +37,9 @@
     {% for haiku in haikus %}
       <div class="haiku">
         {{ haiku.content | linebreaks }}
+        {% if haiku.image_path %}
+        <br><img src="{{ url_for('static', filename='uploads/' ~ haiku.image_path) }}" alt="Image">
+        {% endif %}
         <p class="info">{{ haiku.timestamp | datestr }}</p>
       </div>
     {% endfor %}

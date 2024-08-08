@@ -7,6 +7,10 @@
     max-height: 400px; /*#高さを設定*/
     overflow-y: auto;
   }
+  .haiku img{
+    max-width: 100%; /* 画像の最大幅を設定 */
+    height: auto; /* 画像の高さを自動調整 */
+  }
 </style>
 
 {# お気に入り登録しているユーザーの一覧を表示 #}
@@ -29,25 +33,29 @@
 <h3>{{ username }}のタイムライン</h3>
 <div class="haiku-list">
 {% if timelines | length == 0 %}
-  <div class="box">タイムラインに作品がありません。
-   俳句を書くか他のユーザーをお気に入りにしてください。</div>
-{% endif %}
-{% for i in timelines %}
-  <div class="haiku">
-    {{ i.content | linebreak }}
-    <p class="info">
-      {{ i.timestamp | datestr }}
-      作: <a href="/users/{{ i.user_id }}">{{ i.username }}</a></p>
-    <form action="/toggle_like/{{ i.id }}" method="post" style="display:inline;">
-      {% if i.liked_by_me %}
-      <button type="submit">いいねを取り消す</button>
-      {% else %}
-      <button type="submit">いいね</button>
+  <div class="box">タイムラインに作品がありません。俳句を書くか他のユーザーをお気に入りにしてください。</div>
+{% else %}
+  {% for i in timelines %}
+    <div class="haiku">
+      {{ i.content | linebreaks }}
+      {% if i.image_path %}
+        <br><img src="{{ url_for('static', filename='uploads/' ~ i.image_path) }}" alt="Image">
       {% endif %}
-    </form>
-    <span>{{ i.like_count }} いいね</span>
-  </div>
-{% endfor %}
+      <p class="info">
+        {{ i.timestamp | datestr }}
+        作: <a href="/users/{{ i.user_id }}">{{ i.username }}</a>
+      </p>
+      <form action="/toggle_like/{{ i.id }}" method="post" style="display:inline;">
+        {% if i.liked_by_me %}
+        <button type="submit">いいねを取り消す</button>
+        {% else %}
+        <button type="submit">いいね</button>
+        {% endif %}
+      </form>
+      <span>{{ i.like_count }} いいね</span>
+    </div>
+  {% endfor %}
+{% endif %}
 </div>
 
 {% endblock %}

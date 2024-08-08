@@ -68,11 +68,17 @@ def is_liked_by_user(user_id, haiku_id):
     return like is not None
 
 #"""俳句を保存する"""
-def save_haiku(user_id, content):
+def save_haiku(user_id, content, image_path=None):
     conn = get_db_connection()
-    conn.execute('INSERT INTO haikus (user_id, content) VALUES (?, ?)', (user_id, content))
+    if image_path:
+        conn.execute('INSERT INTO haikus (user_id, content, timestamp, image_path) VALUES (?, ?, datetime("now"), ?)', 
+                     (user_id, content, image_path))
+    else:
+        conn.execute('INSERT INTO haikus (user_id, content, timestamp) VALUES (?, ?, datetime("now"))', 
+                     (user_id, content))
     conn.commit()
     conn.close()
+
 
 #"""タイムラインを取得する"""
 def get_timelines(user_id):
@@ -86,3 +92,5 @@ def get_timelines(user_id):
     ''', (user_id, user_id)).fetchall()
     conn.close()
     return haikus
+
+
