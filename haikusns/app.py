@@ -96,7 +96,8 @@ def toggle_like(haiku_id):
 @app.route('/write', methods=['GET'])
 @user.login_required
 def write():
-    return render_template("write_form.html",id=user.get_id())
+    user_id = user.get_id()
+    return render_template("write_form.html", user_id=user_id)
 
 @app.route("/write/try",methods=["POST"])
 @user.login_required
