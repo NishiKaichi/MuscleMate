@@ -44,6 +44,13 @@ def get_id():
     """ログイン中のユーザーIDを取得する"""
     return session['login'] if is_login() else None
 
+def get_username(user_id):
+    """ユーザーIDからユーザー名を取得する"""
+    conn = get_db_connection()
+    user = conn.execute('SELECT username FROM users WHERE id = ?', (user_id,)).fetchone()
+    conn.close()
+    return user['username'] if user else None
+
 def get_allusers():
     """全ユーザーを取得する"""
     conn = get_db_connection()

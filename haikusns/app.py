@@ -15,6 +15,7 @@ app.secret_key = 'TIIDe5TUMtPUHpyu'
 def index():
     me = user.get_id()
     return render_template('index.html', id=me,
+            username = user.get_username(me),
             users=user.get_allusers(),
             fav_users=data.get_fav_list(me),
             timelines=data.get_timelines(me))
@@ -35,7 +36,7 @@ def login_try():
     flash("ログインに失敗しました")
     return redirect('/login')
 
-#,ログアウト処理
+#ログアウト処理
 @app.route('/logout')
 def logout():
     user.try_logout()

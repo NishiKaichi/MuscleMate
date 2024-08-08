@@ -53,4 +53,3 @@ def get_timelines(user_id):
     ''', (user_id, user_id)).fetchall()
     conn.close()
     return haikus
-
