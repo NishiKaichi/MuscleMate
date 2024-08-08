@@ -11,21 +11,36 @@ def init_db():
             )
         ''')
         cur.execute('''
-            CREATE TABLE IF NOT EXISTS favs (
-                user_id INTEGER,
-                fav_id INTEGER,
-                PRIMARY KEY (user_id, fav_id)
-            )
-        ''')
-        cur.execute('''
             CREATE TABLE IF NOT EXISTS haikus (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
+                user_id INTEGER NOT NULL,
                 content TEXT NOT NULL,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id)
             )
-        ''')
-        conn.commit()
+            ''')
+
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS favs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                fav_id INTEGER NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users (id),
+                FOREIGN KEY (fav_id) REFERENCES users (id)
+            )
+            ''')
+    
+        # 新しいlikesテーブルを追加
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS likes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                haiku_id INTEGER NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (haiku_id) REFERENCES haikus(id)
+            )
+            ''')
+    conn.commit()
 
 if __name__ == '__main__':
     init_db()
