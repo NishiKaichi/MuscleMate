@@ -10,6 +10,11 @@
     max-height: 400px; /*#高さを設定*/
     overflow-y: auto;
   }
+  .haiku img {
+    max-width: 100%; /* 画像の最大幅を設定 */
+    max-height: 300px; /* 画像の最大高さを設定 */
+    height: auto; /* 画像の高さを自動調整 */
+  }
 </style>
 
 {{ user_info['username'] }}さんの俳句ページ
@@ -37,7 +42,18 @@
     {% for haiku in haikus %}
       <div class="haiku">
         {{ haiku.content | linebreaks }}
+        {% if haiku.image_path %}
+        <br><img src="{{ url_for('static', filename='uploads/' ~ haiku.image_path) }}" alt="Image">
+        {% endif %}
         <p class="info">{{ haiku.timestamp | datestr }}</p>
+        <form action="/toggle_like/{{ haiku.id }}" method="post" style="display:inline;">
+          {% if haiku.liked_by_me %}
+          <button type="submit">いいねを取り消す</button>
+          {% else %}
+          <button type="submit">いいね</button>
+          {% endif %}
+        </form>
+        <span>{{ haiku.like_count }} いいね</span>
       </div>
     {% endfor %}
   </div>

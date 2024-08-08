@@ -2,14 +2,15 @@
 {% block contents %}
   <h3>俳句の書き込み</h3>
   <div class="haiku-list">
-  <form action="/write/try" method="POST"
-    class="pure-form">
-    <textarea name="text" rows="4"></textarea>
-    <br><br>
-    <button type="submit" class="pure-button pure-button-primary">
-    投稿</button>
-  </form>
+    <form action="/write/try" method="POST" enctype="multipart/form-data" class="pure-form">
+      <textarea name="text" rows="4"></textarea>
+      <br><br>
+      <input type="file" name="image">
+      <br><br>
+      <button type="submit" class="pure-button pure-button-primary">投稿</button>
+    </form>
   </div>
   <br><br><br>
 {% endblock %}
+
 

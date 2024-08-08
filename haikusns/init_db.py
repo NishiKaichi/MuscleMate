@@ -40,6 +40,8 @@ def init_db():
                 FOREIGN KEY (haiku_id) REFERENCES haikus(id)
             )
             ''')
+        
+        cur.execute('ALTER TABLE haikus ADD COLUMN image_path TEXT')
     conn.commit()
 
 if __name__ == '__main__':
