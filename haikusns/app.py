@@ -95,7 +95,7 @@ def toggle_like(haiku_id):
         data.remove_like(user_id, haiku_id)
     else:
         data.add_like(user_id, haiku_id)
-    return redirect('/')
+    return redirect(request.referrer)
 
 #俳句投稿処理
 @app.route('/write', methods=['GET'])
