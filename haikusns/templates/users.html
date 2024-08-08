@@ -46,6 +46,14 @@
         <br><img src="{{ url_for('static', filename='uploads/' ~ haiku.image_path) }}" alt="Image">
         {% endif %}
         <p class="info">{{ haiku.timestamp | datestr }}</p>
+        <form action="/toggle_like/{{ haiku.id }}" method="post" style="display:inline;">
+          {% if haiku.liked_by_me %}
+          <button type="submit">いいねを取り消す</button>
+          {% else %}
+          <button type="submit">いいね</button>
+          {% endif %}
+        </form>
+        <span>{{ haiku.like_count }} いいね</span>
       </div>
     {% endfor %}
   </div>
