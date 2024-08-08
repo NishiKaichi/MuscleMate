@@ -62,6 +62,7 @@ def try_logout():
     """ログアウト処理"""
     session.pop('login', None)
 
+#いいね数カウントする際にuser.htmlに渡すときに使います
 def get_haikus_by_user(user_id, current_user_id):
     conn = get_db_connection()
     haikus = conn.execute(
