@@ -113,18 +113,15 @@ def try_write():
 @app.route('/users/<int:user_id>')
 @user.login_required
 def user_profile(user_id):
-    current_url=request.path  #現在のURLを取得
-    profile_url=url_for("user_profile",user_id=user.get_id())  #プロフィールページのURLを作成
-    if current_url==profile_url:
-       conn = data.get_db_connection()
-       user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-       haikus = conn.execute('SELECT * FROM haikus WHERE user_id = ?', (user_id,)).fetchall()
-       is_fav = data.is_fav(user.get_id(), user_id)
-       conn.close()
-       return  render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, user_id=user.get_id())
-    else:
-       return  redirect(profile_url)
-    
+    conn = data.get_db_connection()
+    user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    if user_info is None:
+        return render_template('404.html'), 404  # 404エラーページを表示
+    haikus = conn.execute('SELECT * FROM haikus WHERE user_id = ?', (user_id,)).fetchall()
+    is_fav = data.is_fav(user.get_id(), user_id)
+    conn.close()
+    current_user_id = user.get_id()
+    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, user_id=user_id, current_user_id=current_user_id) 
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
