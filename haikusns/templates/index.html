@@ -38,6 +38,14 @@
     <p class="info">
       {{ i.timestamp | datestr }}
       作: <a href="/users/{{ i.user_id }}">{{ i.username }}</a></p>
+    <form action="/toggle_like/{{ i.id }}" method="post" style="display:inline;">
+      {% if i.liked_by_me %}
+      <button type="submit">いいねを取り消す</button>
+      {% else %}
+      <button type="submit">いいね</button>
+      {% endif %}
+    </form>
+    <span>{{ i.like_count }} いいね</span>
   </div>
 {% endfor %}
 </div>

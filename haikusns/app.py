@@ -81,6 +81,17 @@ def remove_fav(fav_id):
     data.remove_fav(user_id, fav_id)
     return redirect(f'/users/{fav_id}')
 
+# いいねの追加と削除を1つのルートで処理する
+@app.route('/toggle_like/<int:haiku_id>', methods=['POST'])
+@user.login_required
+def toggle_like(haiku_id):
+    user_id = user.get_id()
+    if data.is_liked_by_user(user_id, haiku_id):
+        data.remove_like(user_id, haiku_id)
+    else:
+        data.add_like(user_id, haiku_id)
+    return redirect('/')
+
 #俳句投稿処理
 @app.route('/write', methods=['GET'])
 @user.login_required
