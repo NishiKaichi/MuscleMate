@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, flash, session
+from flask import Flask, redirect, render_template, request, flash, session,url_for
 from markupsafe import Markup
 import os, time
 import sqlite3
@@ -20,6 +20,7 @@ def index():
             users=user.get_allusers(),
             fav_users=data.get_fav_list(me),
             timelines=data.get_timelines(me),user_id=me)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -70,7 +71,7 @@ def register():
 def add_fav(fav_id):
     user_id = user.get_id()
     data.add_fav(user_id, fav_id)
-    return redirect('/users/{fav_id}')
+    return redirect(f'/users/{fav_id}')
 
 #お気に入り削除処理
 @app.route('/remove_fav/<int:fav_id>', methods=['POST'])
@@ -78,7 +79,7 @@ def add_fav(fav_id):
 def remove_fav(fav_id):
     user_id = user.get_id()
     data.remove_fav(user_id, fav_id)
-    return redirect('/users/{fav_id}')
+    return redirect(f'/users/{fav_id}')
 
 #俳句投稿処理
 @app.route('/write', methods=['GET'])
@@ -101,15 +102,18 @@ def try_write():
 @app.route('/users/<int:user_id>')
 @user.login_required
 def user_profile(user_id):
-    conn = data.get_db_connection()
-    user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-    haikus = conn.execute('SELECT * FROM haikus WHERE user_id = ?', (user_id,)).fetchall()
-    is_fav = data.is_fav(user.get_id(), user_id)
-    conn.close()
-
-    current_user_id = user.get_id()
-
-    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, current_user_id=current_user_id)
+    current_url=request.path  #現在のURLを取得
+    profile_url=url_for("user_profile",user_id=user.get_id())  #プロフィールページのURLを作成
+    if current_url==profile_url:
+       conn = data.get_db_connection()
+       user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+       haikus = conn.execute('SELECT * FROM haikus WHERE user_id = ?', (user_id,)).fetchall()
+       is_fav = data.is_fav(user.get_id(), user_id)
+       conn.close()
+       return  render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, user_id=user.get_id())
+    else:
+       return  redirect(profile_url)
+    
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
