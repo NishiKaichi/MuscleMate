@@ -35,7 +35,7 @@ def login_try():
     flash("ログインに失敗しました")
     return redirect('/login')
 
-#,ログアウト処理
+#ログアウト処理
 @app.route('/logout')
 def logout():
     user.try_logout()
