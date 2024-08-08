@@ -30,9 +30,14 @@ def remove_fav(user_id, fav_id):
 def get_fav_list(user_id):
     """お気に入りリストを取得する"""
     conn = get_db_connection()
-    favs = conn.execute('SELECT fav_id FROM favs WHERE user_id = ?', (user_id,)).fetchall()
+    favs = conn.execute('''
+        SELECT users.id as user_id, users.username
+        FROM favs 
+        JOIN users ON favs.fav_id = users.id 
+        WHERE favs.user_id = ?
+    ''', (user_id,)).fetchall()
     conn.close()
-    return [fav['fav_id'] for fav in favs]
+    return favs
 
 def save_haiku(user_id, content):
     """俳句を保存する"""

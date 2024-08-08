@@ -54,7 +54,7 @@ def get_username(user_id):
 def get_allusers():
     """全ユーザーを取得する"""
     conn = get_db_connection()
-    users = conn.execute('SELECT * FROM users').fetchall()
+    users = conn.execute('SELECT id as user_id, username FROM users').fetchall()
     conn.close()
     return users
 

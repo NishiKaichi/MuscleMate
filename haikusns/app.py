@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, flash, session
 from markupsafe import Markup
 import os, time
+import sqlite3
 from datetime import datetime
 import sns_user as user, sns_data as data   
 
@@ -98,6 +99,17 @@ def try_write():
         print("no text provided")
     return redirect('/')
 
+@app.route('/users/<int:user_id>')
+@user.login_required
+def user_profile(user_id):
+    conn = data.get_db_connection()
+    user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    haikus = conn.execute('SELECT * FROM haikus WHERE user_id = ?', (user_id,)).fetchall()
+    is_fav = data.is_fav(user.get_id(), user_id)
+    conn.close()
+
+    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav)
+
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
 def add_staticfile():
@@ -121,7 +133,11 @@ def datestr_filter(s):
     dt=datetime.strptime(s,'%Y-%m-%d %H:%M:%S')
     return time.strftime('%Y年%m月%d日 %H:%M:%S')
 
+def linebreaks_filter(s):
+    return Markup(s.replace('\n', '<br>'))
+
 app.jinja_env.filters['datestr'] = datestr_filter
+app.jinja_env.filters['linebreaks'] = linebreaks_filter
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
