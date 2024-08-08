@@ -71,7 +71,7 @@ def register():
 def add_fav(fav_id):
     user_id = user.get_id()
     data.add_fav(user_id, fav_id)
-    return redirect('/')
+    return redirect(f'/users/{fav_id}')
 
 #お気に入り削除処理
 @app.route('/remove_fav/<int:fav_id>', methods=['POST'])
@@ -79,7 +79,7 @@ def add_fav(fav_id):
 def remove_fav(fav_id):
     user_id = user.get_id()
     data.remove_fav(user_id, fav_id)
-    return redirect('/')
+    return redirect(f'/users/{fav_id}')
 
 #俳句投稿処理
 @app.route('/write', methods=['GET'])
