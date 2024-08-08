@@ -29,6 +29,7 @@ body {
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .login-container h2,
@@ -174,14 +175,13 @@ textarea {
 .boxes {
   display: flex;
   gap: 20px; /* 子要素間の間隔を20pxに設定 */
-  justify-content: space-between; /* 子要素間の空白を均等に設定 */
+  justify-content: center; /* 子要素間の空白を均等に設定 */
+  max-width: 800px; /* 最大幅を設定して中央ぞろえ */
+  margin: 0 auto; /* 左右の余白を自動で均等に設定して中央に配置 */
 }
-.boxes > .logo {
-  margin-right: 20px; /* 右側の間隔を20pxに設定 */
-}
-
+.boxes > .logo,
 .boxes > .login-container {
-  margin-left: 20px; /* 左側の間隔を20pxに設定 */
+  margin: 0; /* 個別のマージンをリセット */
 }
 
 .logo_loginpage{
