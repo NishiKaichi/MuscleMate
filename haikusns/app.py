@@ -121,8 +121,7 @@ def user_profile(user_id):
     haikus = conn.execute('SELECT * FROM haikus WHERE user_id = ?', (user_id,)).fetchall()
     is_fav = data.is_fav(user.get_id(), user_id)
     conn.close()
-    current_user_id = user.get_id()
-    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, user_id=user_id, current_user_id=current_user_id) 
+    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, user_id=user.get_id()) 
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
@@ -146,7 +145,7 @@ def linebreak_filter(s):
 def datestr_filter(s):
     dt=datetime.strptime(s,'%Y-%m-%d %H:%M:%S')
     return time.strftime('%Y年%m月%d日 %H:%M:%S')
-
+#改行を有効にするフィルタの追加
 def linebreaks_filter(s):
     return Markup(s.replace('\n', '<br>'))
 
