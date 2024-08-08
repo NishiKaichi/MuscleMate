@@ -62,6 +62,18 @@ def try_logout():
     """ログアウト処理"""
     session.pop('login', None)
 
+def get_haikus_by_user(user_id, current_user_id):
+    conn = get_db_connection()
+    haikus = conn.execute(
+        'SELECT h.id, h.content, h.image_path, h.timestamp, '
+        '       (SELECT COUNT(*) FROM likes WHERE haiku_id = h.id) as like_count, '
+        '       (SELECT 1 FROM likes WHERE user_id = ? AND haiku_id = h.id) as liked_by_me '
+        '  FROM haikus h WHERE h.user_id = ?',
+        (current_user_id, user_id)
+    ).fetchall()
+    conn.close()
+    return haikus
+
 # ログイン必須を処理するデコレーターを定義 --- (*7)
 def login_required(func):
     @wraps(func)

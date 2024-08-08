@@ -48,7 +48,7 @@
         <p class="info">{{ haiku.timestamp | datestr }}</p>
         <form action="/toggle_like/{{ haiku.id }}" method="post" style="display:inline;">
           {% if haiku.liked_by_me %}
-          <button type="submit">いいねを取り消す</button>
+          <button type="submit">いいね</button>
           {% else %}
           <button type="submit">いいね</button>
           {% endif %}
