@@ -1,0 +1,162 @@
+.pure-img-responsive {
+    max-width: 100%; /* 画像の最大幅を100%に設定し、レスポンシブにする */
+    height: auto; /* アスペクト比を維持する */
+}
+
+/* コンテナにトランジションを追加し、出し入れを滑らかにする */
+#layout,
+#menu,
+.menu-link {
+    -webkit-transition: all 0.2s ease-out; /* トランジションの設定 */
+    -moz-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+}
+
+header {
+    position: fixed; /* 固定位置 */
+    top: 0; /* 上端に配置 */
+    left: 0; /* 左端に配置 */
+    right: 0; /* 右端に配置 */
+    z-index: 1000; /* コンテンツの上に表示 */
+    background: #191818; /* 背景色 */
+}
+
+#topbar {
+    display: flex; /* フレックスボックスで縦方向に配置 */
+    flex-direction: column; /* 縦方向に配置 */
+    width: 100%; /* 幅を100%に設定 */
+    align-items: flex-start; /* 左詰め */
+    background: #191818; /* 背景色 */
+}
+
+#logo_toppage {
+    padding: 1em 1em; /* 上下と左のパディング */
+    color: white; /* テキスト色 */
+    font-size: 1.5em; /* フォントサイズを大きく */
+}
+
+#menu-container {
+    width: 100%; /* 幅を100%に設定 */
+    display: flex; /* フレックスボックスで横方向に配置 */
+    justify-content: flex-start; /* 左詰め */
+    align-items: center; /* 縦方向に中央揃え */
+}
+
+#menu {
+    display: flex; /* フレックスボックスで横方向に配置 */
+    justify-content: flex-start; /* 左詰め */
+    align-items: center; /* 縦方向に中央揃え */
+    padding-left: 1em; /* 左のパディング */
+}
+
+.pure-form {
+    margin-right: 1em; /* 検索ボックスの右側に余白 */
+}
+
+.pure-input-rounded {
+    border-radius: 1.5em; /* 丸みを帯びた入力フィールド */
+    padding: 0.5em; /* 内側の余白 */
+    border: 1px solid #ccc; /* ボーダー */
+}
+
+#menu a {
+    color: #999; /* リンクの色を薄いグレーに */
+    border: none; /* 境界線を削除 */
+    padding: 0.6em; /* リンクの内側の余白 */
+    display: inline-block; /* インラインブロック表示 */
+}
+
+#menu .pure-menu,
+#menu .pure-menu ul {
+    border: none; /* 境界線を削除 */
+    background: transparent; /* 背景を透明に */
+    display: flex; /* フレックスボックスで横方向に配置 */
+    list-style: none; /* リストスタイルを削除 */
+    padding: 0; /* パディングを削除 */
+    margin: 0; /* マージンを削除 */
+}
+
+#menu .pure-menu li {
+    margin-right: 1em; /* メニュー項目間のマージン */
+}
+
+#menu .pure-menu li a:hover,
+#menu .pure-menu li a:focus {
+    background: #333; /* ホバーやフォーカス時の背景色 */
+}
+
+#menu .pure-menu-selected,
+#menu .pure-menu-heading {
+    background: #1f8dd6; /* 選択された項目と見出しの背景色 */
+}
+
+#menu .pure-menu-selected a {
+    color: #fff; /* 選択された項目のテキスト色 */
+}
+
+#menu .pure-menu-heading {
+    font-size: 110%; /* フォントサイズを少し大きくする */
+    color: #fff; /* テキスト色を白に */
+    margin: 0; /* 余白を削除 */
+}
+
+.menu-link {
+    display: block; /* 表示 */
+    margin-right: 1em; /* 右側の余白 */
+    background: rgba(0,0,0,0.7); /* 半透明の黒背景 */
+    font-size: 10px; /* フォントサイズを小さく */
+    z-index: 10; /* 他の要素の上に表示 */
+    width: 2em; /* 幅を狭く */
+    height: 2em; /* 高さを2emに */
+    padding: 1em; /* 内側の余白 */
+}
+
+.menu-link:hover,
+.menu-link:focus {
+    background: #000; /* ホバーやフォーカス時の背景色 */
+}
+
+.menu-link span {
+    position: relative; /* 相対位置 */
+    display: block; /* ブロック表示 */
+}
+
+.menu-link span,
+.menu-link span:before,
+.menu-link span:after {
+    background-color: #fff; /* ラインの色を白に */
+    width: 100%; /* 幅を100%に */
+    height: 0.2em; /* 高さを0.2emに */
+}
+
+.menu-link span:before,
+.menu-link span:after {
+    position: absolute; /* 絶対位置 */
+    margin-top: -0.6em; /* 上のラインをオフセット */
+    content: " "; /* 空のコンテンツ */
+}
+
+.menu-link span:after {
+    margin-top: 0.6em; /* 下のラインをオフセット */
+}
+
+@media (min-width: 48em) {
+    .header,
+    .content {
+        padding-top: 160px; /* 大きな画面用の上部の余白 */
+    }
+
+    #layout {
+        padding-top: 160px; /* レイアウトの上部にパディング */
+        top: 0; /* 上端に位置 */
+    }
+}
+
+@media (max-width: 48em) {
+    #layout.active {
+        position: relative; /* 相対位置 */
+        top: 160px; /* 上に移動 */
+    }
+}
