@@ -1,16 +1,28 @@
 {% extends "layout_login.html" %}
 
 {% block title %}
-  {{ user_info.username }}さんの俳句ページ
+  {{ user_info['username'] }}さんの俳句ページ
 {% endblock %}
 
 {% block contents %}
+<style>
+  .haiku-list{
+    max-height: 400px; /*#高さを設定*/
+    overflow-y: auto;
+  }
+</style>
+
+{{ user_info['username'] }}さんの俳句ページ
 
 <div class="box_c">
   {% if is_fav %}
-    👍 <a class="pure-button" href="/fav/remove/{{ user_info.id }}">お気に入りを外す</a>
+  <form action="/remove_fav/{{ user_info['id'] }}" method="POST">
+    <button type="submit" class="pure-button">お気に入り解除</button>
+  </form>
   {% else %}
-    <a class="pure-button" href="/fav/add/{{ user_info.id }}">お気に入りにする</a>
+    <form action="/add_fav/{{ user_info['id'] }}" method="POST">
+    <button type="submit" class="pure-button">お気に入り追加</button>
+  </form>
   {% endif %}
 </div>
 
