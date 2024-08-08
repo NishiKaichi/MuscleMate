@@ -21,7 +21,6 @@ def index():
             fav_users=data.get_fav_list(me),
             timelines=data.get_timelines(me),user_id=me)
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -71,7 +70,7 @@ def register():
 def add_fav(fav_id):
     user_id = user.get_id()
     data.add_fav(user_id, fav_id)
-    return redirect(f'/users/{fav_id}')
+    return redirect('/users/{fav_id}')
 
 #お気に入り削除処理
 @app.route('/remove_fav/<int:fav_id>', methods=['POST'])
@@ -79,7 +78,7 @@ def add_fav(fav_id):
 def remove_fav(fav_id):
     user_id = user.get_id()
     data.remove_fav(user_id, fav_id)
-    return redirect(f'/users/{fav_id}')
+    return redirect('/users/{fav_id}')
 
 #俳句投稿処理
 @app.route('/write', methods=['GET'])
@@ -108,7 +107,9 @@ def user_profile(user_id):
     is_fav = data.is_fav(user.get_id(), user_id)
     conn.close()
 
-    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav)
+    current_user_id = user.get_id()
+
+    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, current_user_id=current_user_id)
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor

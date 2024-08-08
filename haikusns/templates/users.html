@@ -14,6 +14,7 @@
 
 {{ user_info['username'] }}さんの俳句ページ
 
+{% if user_info['id'] != current_user_id %}
 <div class="box_c">
   {% if is_fav %}
   <form action="/remove_fav/{{ user_info['id'] }}" method="POST">
@@ -25,6 +26,7 @@
   </form>
   {% endif %}
 </div>
+{% endif %}
 
 <h3>作品</h3>
 
