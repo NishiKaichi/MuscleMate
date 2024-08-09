@@ -41,9 +41,9 @@ def init_db():
             CREATE TABLE IF NOT EXISTS likes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
-                haiku_id INTEGER NOT NULL,
+                post_id INTEGER NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (haiku_id) REFERENCES haikus(id)
+                FOREIGN KEY (post_id) REFERENCES haikus(id)
             )
         ''')
 
