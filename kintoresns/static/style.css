@@ -20,84 +20,11 @@ body {
   width: 100%;
 }
 
-.login-container,
-.register-container {
-  background-color: #fff;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  width: 100%;
-  max-width: 400px;
-  box-sizing: border-box;
-  margin: 0 auto;
-}
-
-.login-container h2,
-.register-container h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-align: center;
-}
-
-.login-container input[type="text"],
-.login-container input[type="password"],
-.register-container input[type="text"],
-.register-container input[type="email"],
-.register-container input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.login-container button,
-.register-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.login-container button:hover,
-.register-container button:hover {
-  background-color: #45a049;
-}
-
-.register-link,
-.login-link {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.register-link a,
-.login-link a {
-  color: #4caf50;
-  text-decoration: none;
-}
-
-.register-link a:hover,
-.login-link a:hover {
-  text-decoration: underline;
-}
-
 .page {
   margin: 0;
     padding: 0;
     width: 100%;
     max-width: none;
-}
-
-h1 {
-  background-color: #f0f0f0;
-  color: brown;
-  padding: 8px 8px 8px 8px;
-  margin: 8px;
 }
 
 h2 {
@@ -113,13 +40,13 @@ h3{
   width: 100%; /*幅を100%に設定*/
 }
 
-.box {
+.box_index {
   padding: 8px;
   margin: 4px;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.box_c {
+.box_userpage {
   padding: 8px;
   margin: 4px;
   text-align: center;
@@ -162,40 +89,10 @@ h3{
   color: red;
 }
 
-#loginform {
-  padding: 4px 8px 4px 8px;
-}
-
 textarea {
   width: 99%;
 }
 
 .footer {
   text-align: center;
-}
-
-.boxes {
-  display: flex;
-  gap: 20px; /* 子要素間の間隔を20pxに設定 */
-  justify-content: center; /* 子要素間の空白を均等に設定 */
-  max-width: 800px; /* 最大幅を設定して中央ぞろえ */
-  margin: 0 auto; /* 左右の余白を自動で均等に設定して中央に配置 */
-}
-.boxes > .logo,
-.boxes > .login-container {
-  margin: 0; /* 個別のマージンをリセット */
-}
-
-.logo_loginpage{
-  margin: 0;
-  color: #333;
-  text-align: center;
-  padding: 2.5em 2em 0;
-  border-bottom: 1px solid #eee;
-}
-
-.logo_loginpage h1 {
-      margin: 0.2em 0;
-      font-size: 3em;
-      font-weight: 300;
 }

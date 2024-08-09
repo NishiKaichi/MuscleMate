@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}ログインページ{% endblock %}
+
+{% block add_stylesheet %}<!-- CSSの追加 -->
+<link rel="stylesheet" href="/static/login_form.css" />
+{% endblock %}
+
 {% block contents %}
-<div class="boxes">
+<div class="boxes_loginpage">
   <div class="logo_loginpage">
     <h1>筋トレSNS</h1>
   </div>

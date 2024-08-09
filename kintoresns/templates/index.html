@@ -21,7 +21,7 @@
 </style>
 
 {# お気に入り登録しているユーザーの一覧を表示 #}
-<div class="box pure-menu-horizontal pure-menu-scrollable">
+<div class="box_index pure-menu-horizontal pure-menu-scrollable">
   お気に入りのトレーニー:
   {% for u in fav_users %}
     <a class="pure-button" href="/users/{{ u.user_id }}">{{ u.username }}</a>
@@ -29,7 +29,7 @@
 </div>
 
 {# 全てのユーザーの一覧を表示 #}
-<div class="box pure-menu-horizontal pure-menu-scrollable">
+<div class="box_index pure-menu-horizontal pure-menu-scrollable">
   すべてのトレーニー:
   {% for u in users %}
     <a class="pure-button" href="/users/{{ u.user_id }}">{{ u.username }}</a>
@@ -40,7 +40,7 @@
 <h3>{{ username }}のタイムライン</h3>
 <div class="post-list">
 {% if timelines | length == 0 %}
-  <div class="box">タイムラインに作品がありません。投稿するか他のユーザーをお気に入りにしてください。</div>
+  <div class="box_index">タイムラインに作品がありません。投稿するか他のユーザーをお気に入りにしてください。</div>
 {% else %}
   {% for i in timelines %}
     <div class="post">
