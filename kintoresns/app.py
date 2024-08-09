@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request, flash, session,url_for
 from markupsafe import Markup
 import os, time
-import sqlite3
+import init_db
 from datetime import datetime
 import sns_user as user, sns_data as data   
 from werkzeug.utils import secure_filename
@@ -11,6 +11,9 @@ app = Flask(__name__)
 app.secret_key = 'TIIDe5TUMtPUHpyu'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
+#dbの初期化
+init_db.init_db()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']

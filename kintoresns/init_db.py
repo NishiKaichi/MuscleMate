@@ -16,6 +16,7 @@ def init_db():
                 user_id INTEGER NOT NULL,
                 content TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                image_path TEXT,
                 FOREIGN KEY (user_id) REFERENCES users (id)
             )
             ''')
@@ -41,7 +42,6 @@ def init_db():
             )
             ''')
         
-        cur.execute('ALTER TABLE haikus ADD COLUMN image_path TEXT')
     conn.commit()
 
 if __name__ == '__main__':
