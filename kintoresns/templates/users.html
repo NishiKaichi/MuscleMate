@@ -1,7 +1,7 @@
 {% extends "layout_login.html" %}
 
 {% block title %}
-  {{ user_info['username'] }}さんの俳句ページ
+  {{ user_info['username'] }}さんの筋トレページ
 {% endblock %}
 
 {% block contents %}
@@ -17,7 +17,7 @@
   }
 </style>
 
-{{ user_info['username'] }}さんの俳句ページ
+{{ user_info['username'] }}さんの筋トレページ
 
 {% if user_info['id'] != current_user_id %}
 <div class="box_c">
@@ -33,10 +33,10 @@
 </div>
 {% endif %}
 
-<h3>作品</h3>
+<h3>投稿</h3>
 
 {% if haikus | length == 0 %}
-  作品はまだありません。
+  投稿はまだありません。
 {% else %}
   <div class="haiku-list">
     {% for haiku in haikus %}
