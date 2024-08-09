@@ -138,8 +138,8 @@ def user_profile(user_id):
     
     current_user_id = user.get_id()
     posts = user.get_posts_by_user(user_id, current_user_id)
-
-    return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id) 
+    
+    return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,) 
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor

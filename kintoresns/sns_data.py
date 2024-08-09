@@ -100,4 +100,11 @@ def get_timelines(user_id):
     conn.close()
     return posts
 
-
+#カテゴリを得る
+def get_category_by_post_id(post_id):
+    conn = get_db_connection()
+    category = conn.execute(
+        'SELECT category FROM posts WHERE id = ?', (post_id,)
+    ).fetchone()
+    conn.close()
+    return category['category'] if category else None
