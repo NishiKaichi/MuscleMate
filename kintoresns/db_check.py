@@ -3,24 +3,17 @@
 
 import sqlite3
 
-def print_table_data(table_name):
-    """指定されたテーブルのデータをすべて表示する"""
+def check_saved_posts():
     conn = sqlite3.connect('data.db')
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    cur = conn.cursor()
     
-    cursor.execute(f'SELECT * FROM {table_name}')
-    rows = cursor.fetchall()
-    
-    print(f"\n--- {table_name} テーブルのデータ ---")
+    # 保存された投稿を確認
+    cur.execute("SELECT content, category FROM posts")
+    rows = cur.fetchall()
     for row in rows:
-        print(dict(row))
+        print(row)
     
     conn.close()
 
-if __name__ == '__main__':
-    # 表示したいテーブルのリスト
-    tables = ['users', 'favs', 'posts', 'likes']
-    
-    for table in tables:
-        print_table_data(table)
+if __name__ == "__main__":
+    check_saved_posts()

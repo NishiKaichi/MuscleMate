@@ -38,6 +38,7 @@
   {% for i in timelines %}
     <div class="post">
       {{ i.content | linebreaks }}
+      <p>カテゴリ: {{ i.category }}</p>
       {% if i.image_path %}
         <br><img src="{{ url_for('static', filename='uploads/' ~ i.image_path) }}" alt="Image">
       {% endif %}

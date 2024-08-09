@@ -112,23 +112,17 @@ def write():
 def try_write():
     user_id = user.get_id()
     text = request.form.get("text", "")
+    category = request.form.get("category")
     file = request.files.get('image')
     filename = None
-    if file:
-        print(f"File received: {file.filename}")  # デバッグ用出力
-        if allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print(f"Image saved as: {filename}")  # デバッグ用出力
-        else:
-            print("Invalid file type")  # デバッグ用出力
-    else:
-        print("No file received")  # デバッグ用出力
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    
     if text:
-        data.save_post(user_id, text, filename)
-        print(f"Post saved with image: {filename}")  # デバッグ用出力
-    else:
-        print("No text provided")  # デバッグ用出力
+        data.save_post(user_id, text, category, filename)
+    
     return redirect('/')
 
 
@@ -144,8 +138,8 @@ def user_profile(user_id):
     
     current_user_id = user.get_id()
     posts = user.get_posts_by_user(user_id, current_user_id)
-
-    return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(),current_user_id=current_user_id) 
+    
+    return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,) 
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor

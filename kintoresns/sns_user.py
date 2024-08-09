@@ -1,6 +1,7 @@
 from flask import session, redirect
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
+from sns_data import get_category_by_post_id
 import sqlite3
 
 def get_db_connection():
@@ -73,7 +74,15 @@ def get_posts_by_user(user_id, current_user_id):
         (current_user_id, user_id)
     ).fetchall()
     conn.close()
-    return posts
+
+    # カテゴリを個別に取得し、結果に追加
+    posts_with_category = []
+    for post in posts:
+        post_with_category = dict(post)
+        category = get_category_by_post_id(post['id'])
+        post_with_category['category'] = category if category is not None else "なし"
+        posts_with_category.append(post_with_category)
+    return posts_with_category
 
 # ログイン必須を処理するデコレーターを定義 --- (*7)
 def login_required(func):

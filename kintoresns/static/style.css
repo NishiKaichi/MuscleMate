@@ -107,8 +107,10 @@ h2 {
   border-bottom: 1px dotted silver;
 }
 
-h3 {
+h3{
   text-align: center;
+  margin: 20px 0; /*上下のマージンを設定*/
+  width: 100%; /*幅を100%に設定*/
 }
 
 .box {
@@ -125,9 +127,9 @@ h3 {
 }
 
 .post-list {
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 400px;
+  max-height: 400px; /* 高さを設定 */
+    overflow-y: auto;
+    margin: 0 auto; /* タイムラインを中央揃え */
 }
 
 .post {
@@ -191,8 +193,9 @@ textarea {
   padding: 2.5em 2em 0;
   border-bottom: 1px solid #eee;
 }
-  .logo_loginpage h1 {
+
+.logo_loginpage h1 {
       margin: 0.2em 0;
       font-size: 3em;
       font-weight: 300;
-  }
+}

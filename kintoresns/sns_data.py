@@ -68,16 +68,23 @@ def is_liked_by_user(user_id, post_id):
     return like is not None
 
 #"""俳句を保存する"""
-def save_post(user_id, content, image_path=None):
-    conn = get_db_connection()
-    if image_path:
-        conn.execute('INSERT INTO posts (user_id, content, timestamp, image_path) VALUES (?, ?, datetime("now"), ?)', 
-                     (user_id, content, image_path))
-    else:
-        conn.execute('INSERT INTO posts (user_id, content, timestamp) VALUES (?, ?, datetime("now"))', 
-                     (user_id, content))
-    conn.commit()
-    conn.close()
+
+def save_post(user_id, content, category, image_path=None):
+    conn = sqlite3.connect('data.db')
+    try:
+        if image_path:
+            conn.execute('''
+                INSERT INTO posts (user_id, content, category, timestamp, image_path) 
+                VALUES (?, ?, ?, datetime("now"), ?)
+            ''', (user_id, content, category, image_path))
+        else:
+            conn.execute('''
+                INSERT INTO posts (user_id, content, category, timestamp) 
+                VALUES (?, ?, ?, datetime("now"))
+            ''', (user_id, content, category))
+        conn.commit()
+    finally:
+        conn.close()
 
 
 #"""タイムラインを取得する"""
@@ -93,4 +100,11 @@ def get_timelines(user_id):
     conn.close()
     return posts
 
-
+#カテゴリを得る
+def get_category_by_post_id(post_id):
+    conn = get_db_connection()
+    category = conn.execute(
+        'SELECT category FROM posts WHERE id = ?', (post_id,)
+    ).fetchone()
+    conn.close()
+    return category['category'] if category else None
