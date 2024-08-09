@@ -88,15 +88,15 @@ def save_post(user_id, content, category, image_path=None):
 
 
 #"""タイムラインを取得する"""
-def get_timelines(user_id):
+def get_timelines():
     conn = get_db_connection()
     posts = conn.execute('''
-        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        SELECT posts.*, users.username, 
+        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
         FROM posts
         JOIN users ON posts.user_id = users.id
-        WHERE posts.user_id = ? OR posts.user_id IN (SELECT fav_id FROM favs WHERE user_id = ?)
         ORDER BY posts.timestamp DESC
-    ''', (user_id, user_id)).fetchall()
+    ''').fetchall()
     conn.close()
     return posts
 
