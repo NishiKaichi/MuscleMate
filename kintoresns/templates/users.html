@@ -48,9 +48,9 @@
         <p class="info">{{ post.timestamp | datestr }}</p>
         <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
           {% if post.liked_by_me %}
-          <button type="submit">いいね</button>
-          {% else %}
           <button type="submit">いいねを取り消す</button>
+          {% else %}
+          <button type="submit">いいね</button>
           {% endif %}
         </form>
         <span>{{ post.like_count }} いいね</span>
