@@ -17,7 +17,9 @@
   }
 </style>
 
+<div style="text-align: center;">
 {{ user_info['username'] }}さんの筋トレページ
+</div>
 
 {% if user_info['id'] != current_user_id %}
 <div class="box_c">
@@ -36,7 +38,9 @@
 <h3>投稿</h3>
 
 {% if posts | length == 0 %}
+  <div style="text-align: center;">
   投稿はまだありません。
+  </div>
 {% else %}
   <div class="post-list">
     {% for post in posts %}
@@ -48,9 +52,9 @@
         <p class="info">{{ post.timestamp | datestr }}</p>
         <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
           {% if post.liked_by_me %}
-          <button type="submit">いいね</button>
-          {% else %}
           <button type="submit">いいねを取り消す</button>
+          {% else %}
+          <button type="submit">いいね</button>
           {% endif %}
         </form>
         <span>{{ post.like_count }} いいね</span>
