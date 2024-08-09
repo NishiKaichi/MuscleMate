@@ -53,21 +53,21 @@ def remove_like(user_id, post_id):
     conn.commit()
     conn.close()
 
-#"""特定の俳句へのいいねの数を取得する"""
+#"""特定のpostへのいいねの数を取得する"""
 def get_likes(post_id):
     conn = get_db_connection()
     likes = conn.execute('SELECT COUNT(*) AS like_count FROM likes WHERE post_id = ?', (post_id,)).fetchone()
     conn.close()
     return likes['like_count']
 
-#"""ユーザーが特定の俳句を既にいいねしているかどうかをチェックする"""
+#"""ユーザーが特定のpostを既にいいねしているかどうかをチェックする"""
 def is_liked_by_user(user_id, post_id):
     conn = get_db_connection()
     like = conn.execute('SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?', (user_id, post_id)).fetchone()
     conn.close()
     return like is not None
 
-#"""俳句を保存する"""
+#"""postを保存する"""
 
 def save_post(user_id, content, category, image_path=None):
     conn = sqlite3.connect('data.db')
@@ -108,3 +108,31 @@ def get_category_by_post_id(post_id):
     ).fetchone()
     conn.close()
     return category['category'] if category else None
+
+def get_all_posts():
+    conn = get_db_connection()
+    posts = conn.execute(
+        '''
+        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        ORDER BY posts.timestamp DESC
+        '''
+    ).fetchall()
+    conn.close()
+    return posts
+
+#カテゴリに基づいて投稿を取得する
+def get_posts_by_category(category_name):
+    conn = get_db_connection()
+    posts = conn.execute(
+        '''
+        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE posts.category = ?
+        ORDER BY posts.timestamp DESC
+        ''', (category_name,)
+    ).fetchall()
+    conn.close()
+    return posts

@@ -1,0 +1,37 @@
+{% extends "layout_login.html" %}
+
+{% block title %}
+    カテゴリ: {{ category_name }}の投稿
+{% endblock %}
+
+{% block contents %}
+<h3>{{ category_name }}の投稿</h3>
+
+{% if posts | length == 0 %}
+    <div style="text-align: center;">
+    このカテゴリに投稿はありません。
+    </div>
+{% else %}
+    <div class="post-list">
+    {% for post in posts %}
+        <div class="post">
+        {{ post.content | linebreaks }}
+        <p>カテゴリ: {{ post.category }}</p>
+        {% if post.image_path %}
+        <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
+        {% endif %}
+        <p class="info">{{ post.timestamp | datestr }}</p>
+        <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
+            {% if post.liked_by_me %}
+            <button type="submit">いいねを取り消す</button>
+            {% else %}
+            <button type="submit">いいね</button>
+            {% endif %}
+        </form>
+        <span>{{ post.like_count }} いいね</span>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}

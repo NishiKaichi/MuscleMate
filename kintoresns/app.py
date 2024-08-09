@@ -141,6 +141,24 @@ def user_profile(user_id):
     
     return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,) 
 
+# カテゴリによる投稿フィルタリング
+@app.route('/category/<category_name>')
+@user.login_required
+def category_posts(category_name):
+    me = user.get_id()
+    
+    # "all"カテゴリが選択された場合はすべての投稿を表示
+    if category_name == "all":
+        posts = data.get_all_posts()
+    else:
+        posts = data.get_posts_by_category(category_name)
+    
+    return render_template('category.html', id=me,
+                            username=user.get_username(me),
+                            users=user.get_allusers(),
+                            category_name=category_name,
+                            posts=posts)
+
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
 def add_staticfile():
