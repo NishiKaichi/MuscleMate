@@ -6,11 +6,11 @@
 
 {% block contents %}
 <style>
-  .haiku-list{
+  .post-list{
     max-height: 400px; /*#高さを設定*/
     overflow-y: auto;
   }
-  .haiku img {
+  .post img {
     max-width: 100%; /* 画像の最大幅を設定 */
     max-height: 300px; /* 画像の最大高さを設定 */
     height: auto; /* 画像の高さを自動調整 */
@@ -35,25 +35,25 @@
 
 <h3>投稿</h3>
 
-{% if haikus | length == 0 %}
+{% if posts | length == 0 %}
   投稿はまだありません。
 {% else %}
-  <div class="haiku-list">
-    {% for haiku in haikus %}
-      <div class="haiku">
-        {{ haiku.content | linebreaks }}
-        {% if haiku.image_path %}
-        <br><img src="{{ url_for('static', filename='uploads/' ~ haiku.image_path) }}" alt="Image">
+  <div class="post-list">
+    {% for post in posts %}
+      <div class="post">
+        {{ post.content | linebreaks }}
+        {% if post.image_path %}
+        <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
         {% endif %}
-        <p class="info">{{ haiku.timestamp | datestr }}</p>
-        <form action="/toggle_like/{{ haiku.id }}" method="post" style="display:inline;">
-          {% if haiku.liked_by_me %}
+        <p class="info">{{ post.timestamp | datestr }}</p>
+        <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
+          {% if post.liked_by_me %}
           <button type="submit">いいね</button>
           {% else %}
           <button type="submit">いいね</button>
           {% endif %}
         </form>
-        <span>{{ haiku.like_count }} いいね</span>
+        <span>{{ post.like_count }} いいね</span>
       </div>
     {% endfor %}
   </div>

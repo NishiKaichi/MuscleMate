@@ -20,7 +20,7 @@ def print_table_data(table_name):
 
 if __name__ == '__main__':
     # 表示したいテーブルのリスト
-    tables = ['users', 'favs', 'haikus']
+    tables = ['users', 'favs', 'posts', 'likes']
     
     for table in tables:
         print_table_data(table)

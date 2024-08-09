@@ -90,14 +90,14 @@ def remove_fav(fav_id):
     return redirect(f'/users/{fav_id}')
 
 # いいねの追加と削除を1つのルートで処理する
-@app.route('/toggle_like/<int:haiku_id>', methods=['POST'])
+@app.route('/toggle_like/<int:post_id>', methods=['POST'])
 @user.login_required
-def toggle_like(haiku_id):
+def toggle_like(post_id):
     user_id = user.get_id()
-    if data.is_liked_by_user(user_id, haiku_id):
-        data.remove_like(user_id, haiku_id)
+    if data.is_liked_by_user(user_id, post_id):
+        data.remove_like(user_id, post_id)
     else:
-        data.add_like(user_id, haiku_id)
+        data.add_like(user_id, post_id)
     return redirect(request.referrer)
 
 #俳句投稿処理
@@ -125,8 +125,8 @@ def try_write():
     else:
         print("No file received")  # デバッグ用出力
     if text:
-        data.save_haiku(user_id, text, filename)
-        print(f"Haiku saved with image: {filename}")  # デバッグ用出力
+        data.save_post(user_id, text, filename)
+        print(f"Post saved with image: {filename}")  # デバッグ用出力
     else:
         print("No text provided")  # デバッグ用出力
     return redirect('/')
@@ -143,9 +143,9 @@ def user_profile(user_id):
     conn.close()
     
     current_user_id = user.get_id()
-    haikus = user.get_haikus_by_user(user_id, current_user_id)
+    posts = user.get_posts_by_user(user_id, current_user_id)
 
-    return render_template('users.html', user_info=user_info, haikus=haikus, is_fav=is_fav, user_id=user.get_id(),current_user_id=current_user_id) 
+    return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(),current_user_id=current_user_id) 
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor

@@ -124,13 +124,13 @@ h3 {
   border-bottom: 1px dotted #e0e0e0;
 }
 
-.haiku-list {
+.post-list {
   margin-right: auto;
   margin-left: auto;
   max-width: 400px;
 }
 
-.haiku {
+.post {
   border: 1px solid silver;
   background-color: #f9f9fe;
   line-height: 40px;

@@ -63,17 +63,17 @@ def try_logout():
     session.pop('login', None)
 
 #いいね数カウントする際にuser.htmlに渡すときに使います
-def get_haikus_by_user(user_id, current_user_id):
+def get_posts_by_user(user_id, current_user_id):
     conn = get_db_connection()
-    haikus = conn.execute(
+    posts = conn.execute(
         'SELECT h.id, h.content, h.image_path, h.timestamp, '
-        '       (SELECT COUNT(*) FROM likes WHERE haiku_id = h.id) as like_count, '
-        '       (SELECT 1 FROM likes WHERE user_id = ? AND haiku_id = h.id) as liked_by_me '
-        '  FROM haikus h WHERE h.user_id = ?',
+        '       (SELECT COUNT(*) FROM likes WHERE post_id = h.id) as like_count, '
+        '       (SELECT 1 FROM likes WHERE user_id = ? AND post_id = h.id) as liked_by_me '
+        '  FROM posts h WHERE h.user_id = ?',
         (current_user_id, user_id)
     ).fetchall()
     conn.close()
-    return haikus
+    return posts
 
 # ログイン必須を処理するデコレーターを定義 --- (*7)
 def login_required(func):

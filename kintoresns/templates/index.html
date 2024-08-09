@@ -3,11 +3,11 @@
 
 {% block contents %}
 <style>
-  .haiku-list{
+  .post-list{
     max-height: 400px; /*#高さを設定*/
     overflow-y: auto;
   }
-  .haiku img{
+  .post img{
     max-width: 100%; /* 画像の最大幅を設定 */
     height: auto; /* 画像の高さを自動調整 */
   }
@@ -31,12 +31,12 @@
 
 {# タイムラインを表示 #}
 <h3>{{ username }}のタイムライン</h3>
-<div class="haiku-list">
+<div class="post-list">
 {% if timelines | length == 0 %}
   <div class="box">タイムラインに作品がありません。投稿するか他のユーザーをお気に入りにしてください。</div>
 {% else %}
   {% for i in timelines %}
-    <div class="haiku">
+    <div class="post">
       {{ i.content | linebreaks }}
       {% if i.image_path %}
         <br><img src="{{ url_for('static', filename='uploads/' ~ i.image_path) }}" alt="Image">

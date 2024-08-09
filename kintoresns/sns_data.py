@@ -40,41 +40,41 @@ def get_fav_list(user_id):
     return favs
 
 #"""いいねを追加する"""
-def add_like(user_id, haiku_id):
+def add_like(user_id, post_id):
     conn = get_db_connection()
-    conn.execute('INSERT INTO likes (user_id, haiku_id) VALUES (?, ?)', (user_id, haiku_id))
+    conn.execute('INSERT INTO likes (user_id, post_id) VALUES (?, ?)', (user_id, post_id))
     conn.commit()
     conn.close()
 
 #"""いいねを削除する"""
-def remove_like(user_id, haiku_id):
+def remove_like(user_id, post_id):
     conn = get_db_connection()
-    conn.execute('DELETE FROM likes WHERE user_id = ? AND haiku_id = ?', (user_id, haiku_id))
+    conn.execute('DELETE FROM likes WHERE user_id = ? AND post_id = ?', (user_id, post_id))
     conn.commit()
     conn.close()
 
 #"""特定の俳句へのいいねの数を取得する"""
-def get_likes(haiku_id):
+def get_likes(post_id):
     conn = get_db_connection()
-    likes = conn.execute('SELECT COUNT(*) AS like_count FROM likes WHERE haiku_id = ?', (haiku_id,)).fetchone()
+    likes = conn.execute('SELECT COUNT(*) AS like_count FROM likes WHERE post_id = ?', (post_id,)).fetchone()
     conn.close()
     return likes['like_count']
 
 #"""ユーザーが特定の俳句を既にいいねしているかどうかをチェックする"""
-def is_liked_by_user(user_id, haiku_id):
+def is_liked_by_user(user_id, post_id):
     conn = get_db_connection()
-    like = conn.execute('SELECT 1 FROM likes WHERE user_id = ? AND haiku_id = ?', (user_id, haiku_id)).fetchone()
+    like = conn.execute('SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?', (user_id, post_id)).fetchone()
     conn.close()
     return like is not None
 
 #"""俳句を保存する"""
-def save_haiku(user_id, content, image_path=None):
+def save_post(user_id, content, image_path=None):
     conn = get_db_connection()
     if image_path:
-        conn.execute('INSERT INTO haikus (user_id, content, timestamp, image_path) VALUES (?, ?, datetime("now"), ?)', 
+        conn.execute('INSERT INTO posts (user_id, content, timestamp, image_path) VALUES (?, ?, datetime("now"), ?)', 
                      (user_id, content, image_path))
     else:
-        conn.execute('INSERT INTO haikus (user_id, content, timestamp) VALUES (?, ?, datetime("now"))', 
+        conn.execute('INSERT INTO posts (user_id, content, timestamp) VALUES (?, ?, datetime("now"))', 
                      (user_id, content))
     conn.commit()
     conn.close()
@@ -83,14 +83,14 @@ def save_haiku(user_id, content, image_path=None):
 #"""タイムラインを取得する"""
 def get_timelines(user_id):
     conn = get_db_connection()
-    haikus = conn.execute('''
-        SELECT haikus.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.haiku_id = haikus.id) AS like_count
-        FROM haikus
-        JOIN users ON haikus.user_id = users.id
-        WHERE haikus.user_id = ? OR haikus.user_id IN (SELECT fav_id FROM favs WHERE user_id = ?)
-        ORDER BY haikus.timestamp DESC
+    posts = conn.execute('''
+        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE posts.user_id = ? OR posts.user_id IN (SELECT fav_id FROM favs WHERE user_id = ?)
+        ORDER BY posts.timestamp DESC
     ''', (user_id, user_id)).fetchall()
     conn.close()
-    return haikus
+    return posts
 
 

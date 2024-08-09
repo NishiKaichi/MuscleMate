@@ -11,7 +11,7 @@ def init_db():
             )
         ''')
         cur.execute('''
-            CREATE TABLE IF NOT EXISTS haikus (
+            CREATE TABLE IF NOT EXISTS posts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 content TEXT NOT NULL,
@@ -36,9 +36,9 @@ def init_db():
             CREATE TABLE IF NOT EXISTS likes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
-                haiku_id INTEGER NOT NULL,
+                post_id INTEGER NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (haiku_id) REFERENCES haikus(id)
+                FOREIGN KEY (post_id) REFERENCES posts(id)
             )
             ''')
         
