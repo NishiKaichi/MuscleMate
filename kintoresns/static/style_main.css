@@ -1,0 +1,18 @@
+#main {
+    max-width: 800px; /* 最大幅を800pxに設定 */
+    margin: 0 auto; /* 自動的に中央揃え */
+    background: #fabf88; /* 背景色を設定 */
+}
+
+footer {
+    position: fixed; /* 固定位置に配置 */
+    bottom: 0; /* フッターを画面の下端に配置 */
+    left: 0; /* フッターを画面の左端に配置 */
+    right: 0; /* フッターを画面の右端に配置 */
+    z-index: 1000; /* フッターを他のコンテンツの上に表示 */
+    width: 100%; /* フッターの幅を画面全体に広げる */
+}
+
+.footer {
+    text-align: center; /* フッターを中央揃えに設定 */
+}

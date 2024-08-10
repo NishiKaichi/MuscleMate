@@ -1,0 +1,84 @@
+h2 {
+    padding: 4px; /* 見出しh2の内側パディングを設定 */
+    margin: 4px; /* 見出しh2の外側マージンを設定 */
+    font-size: 1em; /* フォントサイズを1emに設定 */
+    border-bottom: 1px dotted silver; /* 下に点線のボーダーを設定 */
+  }
+  
+
+h3 {
+    text-align: center; /* 見出しh3を中央揃え */
+    margin: 20px 0; /* 上下のマージンを設定 */
+    width: 100%; /* 幅を100%に設定 */
+}
+
+.post {
+    border: 1px solid silver; /* 銀色の実線ボーダーを設定 */
+    background-color: #f9f9fe; /* 背景色を淡い青紫に設定 */
+    line-height: 40px; /* 行間を40pxに設定 */
+    font-size: 16px; /* フォントサイズを16pxに設定 */
+    padding: 14px 20px 30px 20px; /* 内側パディングを設定 */
+    margin: 14px 20px 20px 20px; /* 外側マージンを設定 */
+    border-radius: 7px; /* ボーダーの角を7px丸める */
+    color: brown; /* テキストカラーをブラウンに設定 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.23); /* ボックスシャドウを設定 */
+}
+
+.post-list {
+    max-height: 400px; /* リストの最大高さを400pxに設定 */
+    overflow-y: auto; /* 縦方向にスクロール可能にする */
+}
+
+.post-list {
+    max-height: 100%; /* 最大高さを100%に設定 */
+    overflow-y: auto; /* 縦方向のスクロールを自動化 */
+    margin: 0 auto; /* タイムラインを中央揃え */
+}
+
+.post img {
+    max-width: 100%; /* 画像の最大幅をコンテナ幅に合わせる */
+    max-height: 300px; /* 画像の最大高さを300pxに制限 */
+    width: auto; /* 画像の横幅は自動調整 */
+    height: auto; /* 画像の高さも自動調整 */
+    display: block; /* 画像をブロック要素として扱う */
+    margin: 0 auto; /* 画像を中央に配置 */
+    object-fit: cover; /* 画像がコンテナにフィットするように調整 */
+    overflow: hidden; /* 画像がコンテナからはみ出た部分を隠す */
+}
+
+.box_index {
+    padding: 8px; /* 内側パディングを8pxに設定 */
+    margin: 4px; /* 外側マージンを4pxに設定 */
+    border-bottom: 1px solid #f0f0f0; /* 下に実線のボーダーを設定 */
+}
+  
+.box_userpage {
+    padding: 8px; /* 内側パディングを8pxに設定 */
+    margin: 4px; /* 外側マージンを4pxに設定 */
+    text-align: center; /* 中央揃え */
+    border-bottom: 1px dotted #e0e0e0; /* 下に点線のボーダーを設定 */
+}
+  
+ 
+  
+.info {
+    padding: 6px; /* 内側パディングを6pxに設定 */
+    margin: 4px; /* 外側マージンを4pxに設定 */
+    border-top: 1px dotted silver; /* 上に点線のボーダーを設定 */
+    color: silver; /* テキストカラーを銀色に設定 */
+    font-size: 10px; /* フォントサイズを10pxに設定 */
+    text-align: right; /* テキストを右揃えに設定 */
+}
+  
+#msg {
+    font-size: 1.5em; /* フォントサイズを1.5emに設定 */
+    font-weight: bold; /* フォントウェイトをボールドに設定 */
+    padding: 20px; /* 内側パディングを20pxに設定 */
+    margin: 8px; /* 外側マージンを8pxに設定 */
+    border: 1px solid silver; /* 銀色の実線ボーダーを設定 */
+    color: red; /* テキストカラーを赤色に設定 */
+}
+  
+textarea {
+    width: 99%; /* 幅を99%に設定 */
+}
