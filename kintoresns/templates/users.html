@@ -10,8 +10,7 @@
 </div>
 
 <!-- プロフィール画像の表示 -->
-<link rel="stylesheet" href="/static/css/sns_contents.css" />
-<div class="profile-section">
+<div class="profile-section" style="text-align: center; margin-bottom: 20px;">
     {% if user_info.profile_image %}
     <img src="{{ url_for('static', filename='uploads/' ~ user_info.profile_image) }}" 
     alt="プロフィール画像" 

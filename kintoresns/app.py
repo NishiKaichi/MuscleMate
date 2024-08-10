@@ -142,22 +142,25 @@ def inject_user_id():
 @app.route('/users/<int:user_id>')
 @user.login_required
 def user_profile(user_id):
-    current_user_id = user.get_id()
+    current_user_id = user.get_id()  # 現在のログインユーザーのIDを取得
     conn = data.get_db_connection()
+    
+    # ユーザー情報を取得
     user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-    
     if user_info is None:
-        return render_template('404.html'), 404
+        return render_template('404.html'), 404  # ユーザーが存在しない場合は404エラーページを表示
     
+    # お気に入り登録されているかどうかを確認
+    is_fav = data.is_fav(current_user_id, user_id)
+    conn.close()
+    
+    # 投稿を取得
     posts = user.get_posts_by_user(user_id, current_user_id)
     
-    # 各投稿にコメントを追加
-    for post in posts:
-        post['comments'] = data.get_post_comments(post['id'])
-    
-    conn.close()
-    return render_template('users.html', user_info=user_info, posts=posts, user_id=current_user_id)
-
+    # ユーザープロフィールページを表示
+    return render_template(
+        'users.html',user_info=user_info,posts=posts,is_fav=is_fav,user_id=user.get_id(),current_user_id=current_user_id,
+    )
 
 #プロフィール画像のアップロード
 @app.route('/upload_profile_image', methods=['POST'])
