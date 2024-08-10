@@ -1,0 +1,14 @@
+{% extends "layout_login.html" %} {% block contents %}
+<h3>通知</h3>
+<div class="notifications-list">
+  {% if notifications | length == 0 %}
+  <p>新しい通知はありません。</p>
+  {% else %}
+  <ul>
+    {% for notification in notifications %}
+    <li>{{ notification.message }} - {{ notification.created_at }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

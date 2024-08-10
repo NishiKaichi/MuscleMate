@@ -1,33 +1,52 @@
 import sqlite3
+import pytz
+from datetime import datetime
 
-#"""データベース接続を取得する"""
+# 日本時間に変換する関数
+def convert_to_jst(utc_dt):
+    jst = pytz.timezone('Asia/Tokyo')
+    utc_dt = datetime.strptime(utc_dt, '%Y-%m-%d %H:%M:%S')
+    return utc_dt.replace(tzinfo=pytz.utc).astimezone(jst)
+
+# データベース接続を取得する
 def get_db_connection():
     conn = sqlite3.connect('data.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-#"""お気に入りを追加する"""
+# 通知を追加する
+def add_notification(user_id, message):
+    conn = get_db_connection()
+    conn.execute('INSERT INTO notifications (user_id, message) VALUES (?, ?)', (user_id, message))
+    conn.commit()
+    conn.close()
+
+# お気に入りを追加する
 def add_fav(user_id, fav_id):
     conn = get_db_connection()
     conn.execute('INSERT INTO favs (user_id, fav_id) VALUES (?, ?)', (user_id, fav_id))
     conn.commit()
     conn.close()
 
-#"""お気に入りかどうかをチェックする"""
+    # 通知を追加
+    message = f"{get_user_by_id(user_id)['username']}さんがお気に入りに追加しました"
+    add_notification(fav_id, message)
+
+# お気に入りかどうかをチェックする
 def is_fav(user_id, fav_id):
     conn = get_db_connection()
     fav = conn.execute('SELECT * FROM favs WHERE user_id = ? AND fav_id = ?', (user_id, fav_id)).fetchone()
     conn.close()
     return fav is not None
 
-#"""お気に入りを削除する"""
+# お気に入りを削除する
 def remove_fav(user_id, fav_id): 
     conn = get_db_connection()
     conn.execute('DELETE FROM favs WHERE user_id = ? AND fav_id = ?', (user_id, fav_id))
     conn.commit()
     conn.close()
 
-#"""お気に入りリストを取得する"""
+# お気に入りリストを取得する
 def get_fav_list(user_id):
     conn = get_db_connection()
     favs = conn.execute('''
@@ -39,36 +58,41 @@ def get_fav_list(user_id):
     conn.close()
     return favs
 
-#"""いいねを追加する"""
+# いいねを追加する
 def add_like(user_id, post_id):
     conn = get_db_connection()
     conn.execute('INSERT INTO likes (user_id, post_id) VALUES (?, ?)', (user_id, post_id))
     conn.commit()
     conn.close()
 
-#"""いいねを削除する"""
+    # 通知を追加
+    post_user_id = get_post_user_id(post_id)
+    if post_user_id != user_id:
+        message = f"{get_user_by_id(user_id)['username']}さんがあなたの投稿にいいねしました"
+        add_notification(post_user_id, message)
+
+# いいねを削除する
 def remove_like(user_id, post_id):
     conn = get_db_connection()
     conn.execute('DELETE FROM likes WHERE user_id = ? AND post_id = ?', (user_id, post_id))
     conn.commit()
     conn.close()
 
-#"""特定のpostへのいいねの数を取得する"""
+# 特定のpostへのいいねの数を取得する
 def get_likes(post_id):
     conn = get_db_connection()
     likes = conn.execute('SELECT COUNT(*) AS like_count FROM likes WHERE post_id = ?', (post_id,)).fetchone()
     conn.close()
     return likes['like_count']
 
-#"""ユーザーが特定のpostを既にいいねしているかどうかをチェックする"""
+# ユーザーが特定のpostを既にいいねしているかどうかをチェックする
 def is_liked_by_user(user_id, post_id):
     conn = get_db_connection()
     like = conn.execute('SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?', (user_id, post_id)).fetchone()
     conn.close()
     return like is not None
 
-#"""postを保存する"""
-
+# postを保存する
 def save_post(user_id, content, categories, image_path=None):
     conn = get_db_connection()
     try:
@@ -88,7 +112,7 @@ def save_post(user_id, content, categories, image_path=None):
     finally:
         conn.close()
 
-#postを削除する
+# postを削除する
 def delete_post(post_id, user_id):
     conn = get_db_connection()
     # 投稿がログイン中のユーザーによって作成されたか確認する
@@ -98,7 +122,7 @@ def delete_post(post_id, user_id):
         conn.commit()
     conn.close()
 
-#"""タイムラインを取得する"""
+# タイムラインを取得する
 def get_timelines():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -141,8 +165,7 @@ def get_timelines():
     conn.close()
     return timelines
 
-
-#カテゴリを得る
+# カテゴリを得る
 def get_category_by_post_id(post_id):
     conn = get_db_connection()
     category = conn.execute(
@@ -151,7 +174,7 @@ def get_category_by_post_id(post_id):
     conn.close()
     return category['category'] if category else None
 
-#全投稿を取得
+# 全投稿を取得する
 def get_all_posts():
     conn = get_db_connection()
     posts = conn.execute(
@@ -172,9 +195,9 @@ def get_all_posts():
         result.append(post_dict)
 
     conn.close()
-    return posts
+    return result
 
-#カテゴリに基づいて投稿を取得する
+# カテゴリに基づいて投稿を取得する
 def get_posts_by_category(category_name, user_id):
     conn = get_db_connection()
     posts = conn.execute(
@@ -197,9 +220,9 @@ def get_posts_by_category(category_name, user_id):
         result.append(post_dict)
     
     conn.close()
-    return posts
+    return result
 
-#コメント取得のための関数
+# コメント取得のための関数
 def get_post_comments(post_id):
     conn = get_db_connection()
     cur = conn.cursor()
@@ -213,3 +236,37 @@ def get_post_comments(post_id):
     comments = cur.fetchall()
     conn.close()
     return comments
+
+# ユーザーIDからユーザー情報を取得する関数を追加
+def get_user_by_id(user_id):
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    conn.close()
+    return user
+
+# post IDからユーザーIDを取得する関数を追加
+def get_post_user_id(post_id):
+    conn = get_db_connection()
+    post_user_id = conn.execute('SELECT user_id FROM posts WHERE id = ?', (post_id,)).fetchone()
+    conn.close()
+    return post_user_id['user_id'] if post_user_id else None
+
+# ユーザーの通知を取得する関数を追加
+def get_notifications(user_id):
+    conn = get_db_connection()
+    notifications = conn.execute('''
+        SELECT id, message, created_at, read 
+        FROM notifications 
+        WHERE user_id = ? 
+        ORDER BY created_at DESC
+    ''', (user_id,)).fetchall()
+    
+    # 日本時間に変換
+    jst_notifications = []
+    for notification in notifications:
+        notification_dict = dict(notification)
+        notification_dict['created_at'] = convert_to_jst(notification['created_at']).strftime('%Y-%m-%d %H:%M:%S')
+        jst_notifications.append(notification_dict)
+    
+    conn.close()
+    return jst_notifications
