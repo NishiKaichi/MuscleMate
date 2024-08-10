@@ -2,24 +2,23 @@
 
 {% block contents %}
 <div id="TimeLine">
-  {# お気に入り登録しているユーザーの一覧を表示 #}
+  <!--{# お気に入り登録しているユーザーの一覧を表示 #}
   <div class="box_index pure-menu-horizontal pure-menu-scrollable">
     お気に入りのトレーニー:
     {% for u in fav_users %}
       <a class="pure-button" href="/users/{{ u.user_id }}">{{ u.username }}</a>
     {% endfor %}
-  </div>
+  </div>-->
 
-  {# 全てのユーザーの一覧を表示 #}
+  <!--{# 全てのユーザーの一覧を表示 #}
   <div class="box_index pure-menu-horizontal pure-menu-scrollable">
     すべてのトレーニー:
     {% for u in users %}
       <a class="pure-button" href="/users/{{ u.user_id }}">{{ u.username }}</a>
     {% endfor %}
-  </div>
+  </div>-->
 
-  {# タイムラインを表示 #}
-  <h3>{{ username }}のタイムライン</h3>
+  <!--タイムラインを表示-->
   <div class="post-list">
     {% if timelines | length == 0 %}
       <div class="box_index">タイムラインに作品がありません。投稿するか他のユーザーをお気に入りにしてください。</div>

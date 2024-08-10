@@ -53,7 +53,7 @@
     border: none;
     cursor: pointer;
     z-index: 1200;
-    width: 30px; /* ボタンの幅 */
+    width: 45px; /* ボタンの幅 */
     height: 30px; /* ボタンの高さ */
     position: relative; /* 子要素の位置を相対的に配置 */
     display: flex;
@@ -66,11 +66,49 @@
     display: block;
     width: 100%; /* ラインの幅をボタン全体に */
     height: 4px; /* ラインの高さ */
-    background-color: white; /* ラインの色を白に設定 */
+    background-color: rgba(255, 255, 255, 0.8); /* ラインの色を白に設定 */
     transition: all 0.3s ease; /* トランジションを追加 */
 }
 
 /* ボタンがホバーされたときのスタイル */
 #menuLink:hover span {
     background-color: #ccc; /* ホバー時の色をグレーに変更 */
+}
+
+/* すべてのユーザーボタンのスタイル */
+#allTrainee {
+    background: rgba(0, 0, 0, 0.0); /* トップバーと同じ背景色 */
+    color: white; /* テキストの色を白に設定 */
+    border: none; /* ボーダーを削除 */
+    cursor: pointer; /* カーソルをポインタに変更 */
+    font-size: 1em; /* フォントサイズを設定 */
+}
+#allTrainee:hover {
+    background: #333; /* ホバー時の背景色を少し明るく */
+}
+
+
+/* すべてのユーザー一覧パネルの初期スタイル */
+#allUsersPanel {
+    position: fixed;
+    top: 127px; /* 初期は画面外（上）に配置 */
+    left: 300px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.9); /* 背景を半透明の黒に設定 */
+    color: white;
+    z-index: 1100; /* トップバーの上に表示 */
+    transition: top 0.3s ease; /* スライドインのトランジションを追加 */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* パネルが表示される状態 */
+#allUsersPanel.active {
+    top: 127px; /* トップバーの下に表示される位置 */
+    left: 300px;
+}
+
+/* パネルが完全に隠れた状態 */
+#allUsersPanel.hidden {
+    display: none; /* パネルを完全に非表示にする */
 }
