@@ -6,7 +6,26 @@
 
 {% block contents %}
 <div style="text-align: center;">
-{{ user_info['username'] }}さんの筋トレページ
+  {{ user_info['username'] }}さんの筋トレページ
+</div>
+
+<!-- プロフィール画像の表示 -->
+<div class="profile-section" style="text-align: center; margin-bottom: 20px;">
+    {% if user_info.profile_image %}
+        <img src="{{ url_for('static', filename='uploads/' ~ user_info.profile_image) }}" alt="プロフィール画像" class="profile-image">
+    {% else %}
+        <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="デフォルトプロフィール画像" class="profile-image">
+    {% endif %}
+    <div>{{ user_info.username }}</div>
+    
+    <!-- プロフィール画像の編集（自分のプロフィールページのみ表示） -->
+    {% if user_info.id == current_user_id %}
+    <form action="/upload_profile_image" method="POST" enctype="multipart/form-data" style="margin-top: 10px;">
+        <label for="profile_image">プロフィール画像をアップロード:</label>
+        <input type="file" name="profile_image" id="profile_image">
+        <button type="submit" class="pure-button pure-button-primary">アップロード</button>
+    </form>
+    {% endif %}
 </div>
 
 {% if user_info['id'] != current_user_id %}
@@ -59,3 +78,4 @@
 {% endif %}
 
 {% endblock %}
+
