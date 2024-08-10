@@ -1,24 +1,7 @@
-
 {% extends "layout_login.html" %}
 
 {% block contents %}
-<style>
-  .post-list{
-    max-height: 400px; /*#高さを設定*/
-    overflow-y: auto;
-  }
-  .post img {
-  max-width: 100%; /* 画像の最大幅をコンテナ幅に合わせる */
-  max-height: 300px; /* 画像の最大高さを300pxに制限 */
-  width: auto; /* 横幅は自動調整 */
-  height: auto; /* 高さも自動調整 */
-  display: block; /* ブロック要素として扱う（他の要素と衝突しない） */
-  margin: 0 auto; /* 画像を中央に配置 */
-  object-fit: cover; /* 画像がコンテナにフィットするようにする */
-  overflow: hidden; /* コンテナからはみ出た部分を隠す */
-}
 
-</style>
 
 {# お気に入り登録しているユーザーの一覧を表示 #}
 <div class="box_index pure-menu-horizontal pure-menu-scrollable">

@@ -1,5 +1,30 @@
-.contents{
-    max-width: 800px;
-    margin: 0 auto;
-    background: #fabf88;
+#main {
+    max-width: 800px; /* 最大幅を800pxに設定 */
+    margin: 0 auto; /* 自動的に中央揃え */
+    background: #fabf88; /* 背景色を設定 */
+}
+
+footer {
+    position: fixed; /* 固定位置に配置 */
+    bottom: 0; /* フッターを画面の下端に配置 */
+    left: 0; /* フッターを画面の左端に配置 */
+    right: 0; /* フッターを画面の右端に配置 */
+    z-index: 1000; /* フッターを他のコンテンツの上に表示 */
+    width: 100%; /* フッターの幅を画面全体に広げる */
+}
+
+.post-list {
+    max-height: 400px; /* リストの最大高さを400pxに設定 */
+    overflow-y: auto; /* 縦方向にスクロール可能にする */
+}
+
+.post img {
+    max-width: 100%; /* 画像の最大幅をコンテナ幅に合わせる */
+    max-height: 300px; /* 画像の最大高さを300pxに制限 */
+    width: auto; /* 画像の横幅は自動調整 */
+    height: auto; /* 画像の高さも自動調整 */
+    display: block; /* 画像をブロック要素として扱う */
+    margin: 0 auto; /* 画像を中央に配置 */
+    object-fit: cover; /* 画像がコンテナにフィットするように調整 */
+    overflow: hidden; /* 画像がコンテナからはみ出た部分を隠す */
 }
