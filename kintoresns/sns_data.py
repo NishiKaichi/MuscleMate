@@ -123,17 +123,19 @@ def delete_post(post_id, user_id):
     conn.close()
 
 # タイムラインを取得する
-def get_timelines():
+def get_timelines(current_user_id):
     conn = get_db_connection()
     cur = conn.cursor()
+    
     cur.execute('''
-        SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
-               users.username, posts.user_id,
-               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        ORDER BY posts.timestamp DESC
-    ''')
+    SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
+           users.username, posts.user_id,
+           (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
+           EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS liked_by_me
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    ORDER BY posts.timestamp DESC
+''', (current_user_id,))
     
     posts = cur.fetchall()
     
@@ -159,6 +161,7 @@ def get_timelines():
             'username': post[5],
             'user_id': post[6],
             'like_count': post[7],
+            'liked_by_me': post[8],  # 追加
             'comments': comments
         })
     
@@ -177,7 +180,7 @@ def get_category_by_post_id(post_id):
 # 全投稿を取得する
 def get_all_posts():
     conn = get_db_connection()
-    posts = conn.execute(
+    result = conn.execute(
         '''
         SELECT posts.*, users.username, 
         (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
@@ -187,42 +190,76 @@ def get_all_posts():
         '''
     ).fetchall()
 
-    # `sqlite3.Row` オブジェクトを辞書に変換してから操作
-    result = []
-    for post in posts:
-        post_dict = dict(post)  # 辞書に変換
-        post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
-        result.append(post_dict)
+    for post in result:
+        post_id=post[0]
+        conn.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,))
+        comments=conn.fetchall()
+        result.append({
+            'id': post[0],
+            'content': post[1],
+            'category': post[2],
+            'timestamp': post[3],
+            'image_path': post[4],
+            'username': post[5],
+            'user_id': post[6],
+            'like_count': post[7],
+            'comments': comments
+        })
 
     conn.close()
     return result
 
-# カテゴリに基づいて投稿を取得する
-def get_posts_by_category(category_name, user_id):
+#カテゴリに基づいて投稿を取得する
+def get_posts_by_category(category_name):
     conn = get_db_connection()
-    posts = conn.execute(
-        '''
-        SELECT posts.*, users.username, 
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
-        (SELECT 1 FROM likes WHERE likes.user_id = ? AND likes.post_id = posts.id) AS liked_by_me
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
+               users.username, posts.user_id,
+               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE posts.category LIKE ?
         ORDER BY posts.timestamp DESC
-        ''', (user_id, f'%{category_name}%')
-    ).fetchall()
+    ''', (f'%{category_name}%',))
     
-    # `sqlite3.Row` オブジェクトを辞書に変換してから操作
     result = []
-    for post in posts:
-        post_dict = dict(post)  # 辞書に変換
-        post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
-        result.append(post_dict)
+    
+    # 各投稿に対応するコメントを取得
+    for post in cur.fetchall():
+        post_id = post[0]  # posts.id
+        cur.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,))
+        comments = cur.fetchall()
+        
+        result.append({
+            'id': post[0],
+            'content': post[1],
+            'category': post[2],
+            'timestamp': post[3],
+            'image_path': post[4],
+            'username': post[5],
+            'user_id': post[6],
+            'like_count': post[7],
+            'comments': comments
+        })
     
     conn.close()
     return result
 
-# コメント取得のための関数
+
+#コメント取得のための関数
 def get_post_comments(post_id):
     conn = get_db_connection()
     cur = conn.cursor()

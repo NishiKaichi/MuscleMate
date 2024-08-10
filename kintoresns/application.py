@@ -27,7 +27,7 @@ def index():
             username=user.get_username(me),
             users=user.get_allusers(),
             fav_users=data.get_fav_list(me),
-            timelines=data.get_timelines(), user_id=me)
+            timelines=data.get_timelines(current_user_id=me), user_id=me)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -229,7 +229,7 @@ def category_posts(category_name):
         posts = data.get_all_posts()
     else:
         user_id = user.get_id()
-        posts = data.get_posts_by_category(category_name, user_id)
+        posts = data.get_posts_by_category(category_name)
     
     return render_template('category.html', id=me,
                             username=user.get_username(me),
