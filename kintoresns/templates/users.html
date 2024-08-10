@@ -9,6 +9,25 @@
   {{ user_info['username'] }}さんの筋トレページ
 </div>
 
+<!-- 自己紹介文の表示 -->
+<div style="margin-bottom: 20px;">
+  <h3>自己紹介</h3>
+  {% if user_info.bio %}
+      <p>{{ user_info.bio | linebreaks }}</p>
+  {% else %}
+      <p>自己紹介文がまだありません。</p>
+  {% endif %}
+
+  <!-- 自己紹介文の編集フォーム（自分のプロフィールページのみ表示） -->
+  {% if user_info.id == current_user_id %}
+  <form action="/edit_bio" method="POST" style="margin-top: 10px;">
+      <textarea name="bio" rows="4" cols="50">{{ user_info.bio }}</textarea>
+      <br>
+      <button type="submit" class="pure-button pure-button-primary">保存</button>
+  </form>
+  {% endif %}
+</div>
+
 <!-- プロフィール画像の表示 -->
 <div class="profile-section" style="text-align: center; margin-bottom: 20px;">
     {% if user_info.profile_image %}

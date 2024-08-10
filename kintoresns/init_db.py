@@ -60,10 +60,17 @@ def init_db():
             )
         ''')        
         
+        # 既存のテーブルにカラムが存在しない場合の処理
         cur.execute("PRAGMA table_info(users)")
         columns = [col[1] for col in cur.fetchall()]
         if 'profile_image' not in columns:
             cur.execute('ALTER TABLE users ADD COLUMN profile_image TEXT')
+
+        # 既存のテーブルにカラムが存在しない場合の処理
+        cur.execute("PRAGMA table_info(users)")
+        columns = [col[1] for col in cur.fetchall()]
+        if 'bio' not in columns:
+            cur.execute('ALTER TABLE users ADD COLUMN bio TEXT')
 
     conn.commit()
 
