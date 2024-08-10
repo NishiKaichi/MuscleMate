@@ -18,9 +18,12 @@ body {
   padding: 0; /* レイアウトの内側パディングをゼロに設定 */
   height: 100%;
   width: 100%; /* レイアウトの幅を100%に設定 */
+  box-sizing: border-box;
 }
 
-
+#main{
+  box-sizing: border-box;
+}
 
 
 

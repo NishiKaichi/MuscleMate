@@ -12,6 +12,7 @@
             このカテゴリに投稿はありません。
         </div>
     {% else %}
+    <div id="TimeLine">
         <div class="post-list">
             {% for post in posts %}
                 <div class="post">
@@ -41,6 +42,7 @@
                 </div>
             {% endfor %}
         </div>
+    </div>
     {% endif %}
 
 {% endblock %}
