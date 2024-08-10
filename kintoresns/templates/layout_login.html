@@ -92,4 +92,19 @@
 {% block add_java_script %}
 <script src="/static/js/style_main.js"></script>
 <script src="/static/js/side_bar_UI.js"></script>
+<script>
+// スクロール位置を保存する
+window.addEventListener('beforeunload', function() {
+    localStorage.setItem('scrollPosition', window.scrollY);
+});
+
+// スクロール位置を復元する
+window.addEventListener('load', function() {
+    const scrollPosition = localStorage.getItem('scrollPosition');
+    if (scrollPosition) {
+        window.scrollTo(0, parseInt(scrollPosition));
+        localStorage.removeItem('scrollPosition');  // 一度復元したら削除
+    }
+});
+</script>
 {% endblock %}
