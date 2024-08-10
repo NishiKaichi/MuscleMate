@@ -165,7 +165,8 @@ def category_posts(category_name):
     if category_name == "all":
         posts = data.get_all_posts()
     else:
-        posts = data.get_posts_by_category(category_name)
+        user_id = user.get_id()
+        posts = data.get_posts_by_category(category_name, user_id,)
     
     return render_template('category.html', id=me,
                             username=user.get_username(me),

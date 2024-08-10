@@ -69,23 +69,34 @@ def is_liked_by_user(user_id, post_id):
 
 #"""postを保存する"""
 
-def save_post(user_id, content, category, image_path=None):
-    conn = sqlite3.connect('data.db')
+def save_post(user_id, content, categories, image_path=None):
+    conn = get_db_connection()
     try:
+        # リストのカテゴリをカンマで結合して文字列にする
+        categories_str = ','.join(categories)  
         if image_path:
             conn.execute('''
                 INSERT INTO posts (user_id, content, category, timestamp, image_path) 
                 VALUES (?, ?, ?, datetime("now"), ?)
-            ''', (user_id, content, category, image_path))
+            ''', (user_id, content, categories_str, image_path))
         else:
             conn.execute('''
                 INSERT INTO posts (user_id, content, category, timestamp) 
                 VALUES (?, ?, ?, datetime("now"))
-            ''', (user_id, content, category))
+            ''', (user_id, content, categories_str))
         conn.commit()
     finally:
         conn.close()
 
+#postを削除する
+def delete_post(post_id, user_id):
+    conn = get_db_connection()
+    # 投稿がログイン中のユーザーによって作成されたか確認する
+    post = conn.execute('SELECT * FROM posts WHERE id = ? AND user_id = ?', (post_id, user_id)).fetchone()
+    if post:
+        conn.execute('DELETE FROM posts WHERE id = ?', (post_id,))
+        conn.commit()
+    conn.close()
 
 #"""タイムラインを取得する"""
 def get_timelines():
@@ -109,30 +120,51 @@ def get_category_by_post_id(post_id):
     conn.close()
     return category['category'] if category else None
 
+#全投稿を取得
 def get_all_posts():
     conn = get_db_connection()
     posts = conn.execute(
         '''
-        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        SELECT posts.*, users.username, 
+        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
         FROM posts
         JOIN users ON posts.user_id = users.id
         ORDER BY posts.timestamp DESC
         '''
     ).fetchall()
+
+    # `sqlite3.Row` オブジェクトを辞書に変換してから操作
+    result = []
+    for post in posts:
+        post_dict = dict(post)  # 辞書に変換
+        post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
+        result.append(post_dict)
+
     conn.close()
     return posts
 
 #カテゴリに基づいて投稿を取得する
-def get_posts_by_category(category_name):
+def get_posts_by_category(category_name, user_id):
     conn = get_db_connection()
     posts = conn.execute(
         '''
-        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        SELECT posts.*, users.username, 
+        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
+        (SELECT 1 FROM likes WHERE likes.user_id = ? AND likes.post_id = posts.id) AS liked_by_me
         FROM posts
         JOIN users ON posts.user_id = users.id
-        WHERE posts.category = ?
+        WHERE posts.category LIKE ?
         ORDER BY posts.timestamp DESC
-        ''', (category_name,)
+        ''', (user_id, f'%{category_name}%')
     ).fetchall()
+    
+    # `sqlite3.Row` オブジェクトを辞書に変換してから操作
+    result = []
+    for post in posts:
+        post_dict = dict(post)  # 辞書に変換
+        post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
+        result.append(post_dict)
+    
     conn.close()
     return posts
+
