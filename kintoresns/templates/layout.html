@@ -9,25 +9,26 @@
     <title>{% block title %}SNS-デモ{% endblock %}</title>
   </head>
   <body>
-    <div id="layout" class="page">
+    <div id="layout">
+
+      <header>
       {% block header %}
       <!-- ここにヘッダの内容 -->
       {% endblock %}
-      <div id="main">
-        <!-- end of .header -->
+    </header>
 
-        <div class="contents">
+      <div id="main">
           {% block contents %}
           <!-- ここにメインコンテンツ -->
           {% endblock %}
-        </div>
-        <!-- end of .contents -->
-
+      </div>
+      
+      <footer>
         {% block footer %}
         
         {% endblock %}
-      </div>
-      <!-- end of #main -->
+        </footer>
+      
     </div>
     <!-- end of #layout -->
 
