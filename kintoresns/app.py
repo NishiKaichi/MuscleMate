@@ -131,7 +131,6 @@ def try_write():
 def delete_post(post_id):
     user_id = user.get_id()
     data.delete_post(post_id, user_id)
-    flash('投稿が削除されました。')
     return redirect(request.referrer)
 
 #user_idをすべてのテンプレートで自動的に利用できるようにする
