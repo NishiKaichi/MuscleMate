@@ -9,7 +9,8 @@ def init_db():
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL
+                password TEXT NOT NULL,
+                profile_image TEXT
             )
         ''')
         
@@ -43,11 +44,11 @@ def init_db():
                 user_id INTEGER NOT NULL,
                 post_id INTEGER NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (post_id) REFERENCES haikus(id)
+                FOREIGN KEY (post_id) REFERENCES posts(id)
             )
         ''')
         
-        #コメントテーブル
+        # コメントテーブル
         cur.execute('''
             CREATE TABLE IF NOT EXISTS comments (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,7 +59,19 @@ def init_db():
                 FOREIGN KEY (post_id) REFERENCES posts (id),
                 FOREIGN KEY (user_id) REFERENCES users (id)
             )
-        ''')        
+        ''')
+
+        # 通知テーブルの作成
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS notifications (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                message TEXT NOT NULL,
+                read INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(user_id) REFERENCES users(id)
+            )
+        ''')
         
         # 既存のテーブルにカラムが存在しない場合の処理
         cur.execute("PRAGMA table_info(users)")

@@ -1,88 +1,98 @@
-{% extends "layout.html" %}
-
-{% block add_stylesheet %}<!-- CSSの追加 -->
+{% extends "layout.html" %} {% block add_stylesheet %}<!-- CSSの追加 -->
 <link rel="stylesheet" href="/static/css/style_main.css" />
 <link rel="stylesheet" href="/static/css/sns_contents.css" />
 <link rel="stylesheet" href="/static/css/top-bar.css" />
 <link rel="stylesheet" href="/static/css/side-bar.css" />
-{% endblock %}
+{% endblock %} {% block header %}
+<!--トップバー-->
+<div id="topbar">
+  <!-- ロゴ部分 -->
+  <div id="logo_toppage">筋トレSNS</div>
+  <div id="menu-container">
+    <button id="menuLink">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-{% block header %}
-    <!--トップバー-->
-    <div id="topbar">
-        <!-- ロゴ部分 -->
-        <div id="logo_toppage">
-            筋トレSNS
-        </div>
-        <div id="menu-container">
-            <button id="menuLink">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        
-            <div id="menu">
-                <!-- カテゴリ選択フォーム -->
-                <form class="pure-form" action="{{ url_for('category_posts', category_name='all') }}" method="GET">
-                    <select name="category" class="pure-input-rounded" onchange="window.location.href='/category/' + this.value;">
-                        <option value="all">カテゴリ検索</option>
-                        <option value="自重トレ">自重トレ</option>
-                        <option value="マシントレ">マシントレ</option>
-                        <option value="ウェイトトレ">ウェイトトレ</option>
-                        <option value="初心者向け">初心者向け</option>
-                        <option value="家トレ">家トレ</option>
-                        <option value="足トレ">足トレ</option>
-                        <option value="腕トレ">腕トレ</option>
-                        <option value="胸トレ">胸トレ</option>
-                        <option value="肩トレ">肩トレ</option>
-                        <option value="背中トレ">背中トレ</option>
-                        <option value="全身トレ">全身トレ</option>
-                        <option value="体幹トレ">体幹トレ</option>
-                        <option value="ストレッチ">ストレッチ</option>
-                        <option value="有酸素">有酸素</option>
-                        <option value="その他">その他</option>
-                        <!-- 他のカテゴリを追加 -->
-                    </select>
-                </form>
-                <!-- メニュー項目 -->
-                <div class="pure-menu">
-                    <ul class="pure-menu-list">
-                        <li class="pure-menu-item">
-                            <a href="/users/{{ user_id }}" class="pure-menu-link">プロフィール</a>
-                        </li>
-                        <li class="pure-menu-item">
-                            <a href="/" class="pure-menu-link">タイムライン</a>
-                        </li>
-                        <li class="pure-menu-item">
-                            <a href="/write" class="pure-menu-link">投稿</a>
-                        </li>
-                        <li class="pure-menu-item">
-                            <a href="/logout" class="pure-menu-link">ログアウト</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div id="menu">
+      <!-- カテゴリ選択フォーム -->
+      <form
+        class="pure-form"
+        action="{{ url_for('category_posts', category_name='all') }}"
+        method="GET"
+      >
+        <select
+          name="category"
+          class="pure-input-rounded"
+          onchange="window.location.href='/category/' + this.value;"
+        >
+          <option value="all">カテゴリ検索</option>
+          <option value="自重トレ">自重トレ</option>
+          <option value="マシントレ">マシントレ</option>
+          <option value="ウェイトトレ">ウェイトトレ</option>
+          <option value="初心者向け">初心者向け</option>
+          <option value="家トレ">家トレ</option>
+          <option value="足トレ">足トレ</option>
+          <option value="腕トレ">腕トレ</option>
+          <option value="胸トレ">胸トレ</option>
+          <option value="肩トレ">肩トレ</option>
+          <option value="背中トレ">背中トレ</option>
+          <option value="全身トレ">全身トレ</option>
+          <option value="体幹トレ">体幹トレ</option>
+          <option value="ストレッチ">ストレッチ</option>
+          <option value="有酸素">有酸素</option>
+          <option value="その他">その他</option>
+          <!-- 他のカテゴリを追加 -->
+        </select>
+      </form>
+      <!-- メニュー項目 -->
+      <div class="pure-menu">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="/users/{{ user_id }}" class="pure-menu-link"
+              >プロフィール</a
+            >
+          </li>
+          <li class="pure-menu-item">
+            <a href="/" class="pure-menu-link">タイムライン</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/write" class="pure-menu-link">投稿</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/notifications" class="pure-menu-link">通知</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/logout" class="pure-menu-link">ログアウト</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <!--/トップバー-->
-    <!--サイドバー-->
-    <div id="sidebar">
-        <div class="sidebar-content">
-            <li>
-                <a href="/users/{{ user_id }}">プロフィール</a>
-            </li>
-            <li>
-                <a href="/">タイムライン</a>
-            </li>
-            <li>
-                <a href="/write">投稿</a>
-            </li>
-            <li>
-                <a href="/logout">ログアウト</a>
-            </li>
-        </div>
-    </div>
-    <!--/サイドバー-->
+  </div>
+</div>
+<!--/トップバー-->
+<!--サイドバー-->
+<div id="sidebar">
+  <div class="sidebar-content">
+    <li>
+      <a href="/users/{{ user_id }}">プロフィール</a>
+    </li>
+    <li>
+      <a href="/">タイムライン</a>
+    </li>
+    <li>
+      <a href="/write">投稿</a>
+    </li>
+    <li>
+      <a href="/notifications">通知</a>
+    </li>
+    <li>
+      <a href="/logout">ログアウト</a>
+    </li>
+  </div>
+</div>
+<!--/サイドバー-->
 {% endblock %}
 
 <!--{% block footer %}
@@ -93,18 +103,18 @@
 <script src="/static/js/style_main.js"></script>
 <script src="/static/js/side_bar_UI.js"></script>
 <script>
-// スクロール位置を保存する
-window.addEventListener('beforeunload', function() {
-    localStorage.setItem('scrollPosition', window.scrollY);
-});
+  // スクロール位置を保存する
+  window.addEventListener("beforeunload", function () {
+    localStorage.setItem("scrollPosition", window.scrollY);
+  });
 
-// スクロール位置を復元する
-window.addEventListener('load', function() {
-    const scrollPosition = localStorage.getItem('scrollPosition');
+  // スクロール位置を復元する
+  window.addEventListener("load", function () {
+    const scrollPosition = localStorage.getItem("scrollPosition");
     if (scrollPosition) {
-        window.scrollTo(0, parseInt(scrollPosition));
-        localStorage.removeItem('scrollPosition');  // 一度復元したら削除
+      window.scrollTo(0, parseInt(scrollPosition));
+      localStorage.removeItem("scrollPosition"); // 一度復元したら削除
     }
-});
+  });
 </script>
 {% endblock %}

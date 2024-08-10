@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, flash, session,url_for
+from flask import Flask, redirect, render_template, request, flash, session, url_for
 from markupsafe import Markup
 import os, time
 import init_db
@@ -12,7 +12,7 @@ app.secret_key = 'TIIDe5TUMtPUHpyu'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
-#dbの初期化
+# dbの初期化
 init_db.init_db()
 
 def allowed_file(filename):
@@ -24,11 +24,10 @@ def allowed_file(filename):
 def index():
     me = user.get_id()
     return render_template('index.html', id=me,
-            username = user.get_username(me),
+            username=user.get_username(me),
             users=user.get_allusers(),
             fav_users=data.get_fav_list(me),
-            timelines=data.get_timelines(),user_id=me)
-
+            timelines=data.get_timelines(), user_id=me)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -45,13 +44,13 @@ def login_try():
     flash("ログインに失敗しました")
     return redirect('/login')
 
-#ログアウト処理
+# ログアウト処理
 @app.route('/logout')
 def logout():
     user.try_logout()
     return redirect('/login')
 
-#ユーザー登録処理
+# ユーザー登録処理
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """ユーザー登録処理"""
@@ -73,7 +72,7 @@ def register():
 
     return render_template('register.html')
 
-#お気に入り追加処理
+# お気に入り追加処理
 @app.route('/add_fav/<int:fav_id>', methods=['POST'])
 @user.login_required
 def add_fav(fav_id):
@@ -81,7 +80,7 @@ def add_fav(fav_id):
     data.add_fav(user_id, fav_id)
     return redirect(f'/users/{fav_id}')
 
-#お気に入り削除処理
+# お気に入り削除処理
 @app.route('/remove_fav/<int:fav_id>', methods=['POST'])
 @user.login_required
 def remove_fav(fav_id):
@@ -100,7 +99,7 @@ def toggle_like(post_id):
         data.add_like(user_id, post_id)
     return redirect(request.referrer)
 
-#post投稿処理
+# post投稿処理
 @app.route('/write', methods=['GET'])
 @user.login_required
 def write():
@@ -125,7 +124,7 @@ def try_write():
     
     return redirect('/')
 
-#post削除処理
+# post削除処理
 @app.route('/delete_post/<int:post_id>', methods=['POST'])
 @user.login_required
 def delete_post(post_id):
@@ -133,7 +132,7 @@ def delete_post(post_id):
     data.delete_post(post_id, user_id)
     return redirect(request.referrer)
 
-#user_idをすべてのテンプレートで自動的に利用できるようにする
+# ユーザーIDをすべてのテンプレートで自動的に利用できるようにする
 @app.context_processor
 def inject_user_id():
     user_id = user.get_id() if user.is_login() else None
@@ -157,13 +156,13 @@ def user_profile(user_id):
     posts = user.get_posts_by_user(user_id, current_user_id)
     
     for post in posts:
-        post["comments"]=data.get_post_comments(post["id"])
+        post["comments"] = data.get_post_comments(post["id"])
         
     conn.close()
     
     # ユーザープロフィールページを表示
     return render_template(
-        'users.html',user_info=user_info,posts=posts,is_fav=is_fav,user_id=user.get_id(),current_user_id=current_user_id,
+        'users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,
     )
 
 #ユーザーページに自己紹介文を追加
@@ -198,7 +197,7 @@ def upload_profile_image():
     
     return redirect(f'/users/{user_id}')
 
-#コメント投稿処理
+# コメント投稿処理
 @app.route('/add_comment/<int:post_id>', methods=['POST'])
 @user.login_required
 def add_comment(post_id):
@@ -210,8 +209,14 @@ def add_comment(post_id):
         conn.execute('INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)', (post_id, user_id, content))
         conn.commit()
         conn.close()
+
+        # 通知を追加
+        post_user_id = data.get_post_user_id(post_id)
+        if post_user_id != user_id:
+            message = f"{data.get_user_by_id(user_id)['username']}さんがあなたの投稿にコメントしました"
+            data.add_notification(post_user_id, message)
     
-    return redirect(request.referrer or '/') #コメント投稿した元のページへリダイレクト
+    return redirect(request.referrer or '/')  # コメント投稿した元のページへリダイレクト
 
 # カテゴリによる投稿フィルタリング
 @app.route('/category/<category_name>')
@@ -231,6 +236,14 @@ def category_posts(category_name):
                             users=user.get_allusers(),
                             category_name=category_name,
                             posts=posts)
+
+# 通知ページの表示
+@app.route('/notifications')
+@user.login_required
+def notifications():
+    user_id = user.get_id()
+    notifications = data.get_notifications(user_id)
+    return render_template('notifications.html', notifications=notifications)
 
 # --- テンプレートのフィルタなど拡張機能の指定 ---
 @app.context_processor
@@ -252,9 +265,10 @@ def linebreak_filter(s):
 # 日付をフォーマットするフィルタを追加
 @app.template_filter('datestr')
 def datestr_filter(s):
-    dt=datetime.strptime(s,'%Y-%m-%d %H:%M:%S')
+    dt = datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
     return time.strftime('%Y年%m月%d日 %H:%M:%S')
-#改行を有効にするフィルタの追加
+
+# 改行を有効にするフィルタの追加
 def linebreaks_filter(s):
     return Markup(s.replace('\n', '<br>'))
 
