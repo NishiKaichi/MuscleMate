@@ -142,17 +142,43 @@ def inject_user_id():
 @app.route('/users/<int:user_id>')
 @user.login_required
 def user_profile(user_id):
+    current_user_id = user.get_id()  # 現在のログインユーザーのIDを取得
     conn = data.get_db_connection()
+    
+    # ユーザー情報を取得
     user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
     if user_info is None:
-        return render_template('404.html'), 404  # 404エラーページを表示
-    is_fav = data.is_fav(user.get_id(), user_id)
+        return render_template('404.html'), 404  # ユーザーが存在しない場合は404エラーページを表示
+    
+    # お気に入り登録されているかどうかを確認
+    is_fav = data.is_fav(current_user_id, user_id)
     conn.close()
     
-    current_user_id = user.get_id()
+    # 投稿を取得
     posts = user.get_posts_by_user(user_id, current_user_id)
     
-    return render_template('users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,) 
+    # ユーザープロフィールページを表示
+    return render_template(
+        'users.html',user_info=user_info,posts=posts,is_fav=is_fav,user_id=user.get_id(),current_user_id=current_user_id,
+    )
+
+#プロフィール画像のアップロード
+@app.route('/upload_profile_image', methods=['POST'])
+@user.login_required
+def upload_profile_image():
+    user_id = user.get_id()
+    file = request.files['profile_image']
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        conn = data.get_db_connection()
+        conn.execute('UPDATE users SET profile_image = ? WHERE id = ?', (filename, user_id))
+        conn.commit()
+        conn.close()
+    
+    return redirect(f'/users/{user_id}')
 
 # カテゴリによる投稿フィルタリング
 @app.route('/category/<category_name>')

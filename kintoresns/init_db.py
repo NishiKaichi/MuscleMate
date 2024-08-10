@@ -46,6 +46,11 @@ def init_db():
                 FOREIGN KEY (post_id) REFERENCES haikus(id)
             )
         ''')
+        
+        cur.execute("PRAGMA table_info(users)")
+        columns = [col[1] for col in cur.fetchall()]
+        if 'profile_image' not in columns:
+            cur.execute('ALTER TABLE users ADD COLUMN profile_image TEXT')
 
     conn.commit()
 
