@@ -164,40 +164,74 @@ def get_all_posts():
         '''
     ).fetchall()
 
-    # `sqlite3.Row` オブジェクトを辞書に変換してから操作
-    result = []
     for post in posts:
-        post_dict = dict(post)  # 辞書に変換
-        post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
-        result.append(post_dict)
+        post_id=post[0]
+        conn.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,))
+        comments=conn.fetchall()
+        posts.append({
+            'id': post[0],
+            'content': post[1],
+            'category': post[2],
+            'timestamp': post[3],
+            'image_path': post[4],
+            'username': post[5],
+            'user_id': post[6],
+            'like_count': post[7],
+            'comments': comments
+        })
 
     conn.close()
     return posts
 
 #カテゴリに基づいて投稿を取得する
-def get_posts_by_category(category_name, user_id):
+def get_posts_by_category(category_name):
     conn = get_db_connection()
-    posts = conn.execute(
-        '''
-        SELECT posts.*, users.username, 
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
-        (SELECT 1 FROM likes WHERE likes.user_id = ? AND likes.post_id = posts.id) AS liked_by_me
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
+               users.username, posts.user_id,
+               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE posts.category LIKE ?
         ORDER BY posts.timestamp DESC
-        ''', (user_id, f'%{category_name}%')
-    ).fetchall()
+    ''', (f'%{category_name}%',))
     
-    # `sqlite3.Row` オブジェクトを辞書に変換してから操作
-    result = []
-    for post in posts:
-        post_dict = dict(post)  # 辞書に変換
-        post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
-        result.append(post_dict)
+    posts = []
+    
+    # 各投稿に対応するコメントを取得
+    for post in cur.fetchall():
+        post_id = post[0]  # posts.id
+        cur.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,))
+        comments = cur.fetchall()
+        
+        posts.append({
+            'id': post[0],
+            'content': post[1],
+            'category': post[2],
+            'timestamp': post[3],
+            'image_path': post[4],
+            'username': post[5],
+            'user_id': post[6],
+            'like_count': post[7],
+            'comments': comments
+        })
     
     conn.close()
     return posts
+
 
 #コメント取得のための関数
 def get_post_comments(post_id):

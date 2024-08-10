@@ -224,7 +224,7 @@ def category_posts(category_name):
         posts = data.get_all_posts()
     else:
         user_id = user.get_id()
-        posts = data.get_posts_by_category(category_name, user_id,)
+        posts = data.get_posts_by_category(category_name)
     
     return render_template('category.html', id=me,
                             username=user.get_username(me),
