@@ -62,7 +62,7 @@
         {% if post.image_path %}
         <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
         {% endif %}
-        <p class="info">{{ post.timestamp | datestr }}</p>
+        
         
         <!-- いいね機能 -->
         <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
@@ -87,7 +87,6 @@
           {% for comment in post.comments %}
             <div class="comment">
               <p><strong>{{ comment.username }}:</strong> {{ comment.content }}</p>
-              <p class="info">{{ comment.timestamp | datestr }}</p>
             </div>
           {% endfor %}
         </div>
