@@ -123,16 +123,17 @@ def get_all_posts():
     return posts
 
 #カテゴリに基づいて投稿を取得する
-def get_posts_by_category(category_name):
+def get_posts_by_category(category_name, user_id):
     conn = get_db_connection()
     posts = conn.execute(
         '''
-        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
+               (SELECT 1 FROM likes WHERE user_id = ? AND post_id = posts.id) as liked_by_me
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE posts.category = ?
         ORDER BY posts.timestamp DESC
-        ''', (category_name,)
+        ''', (user_id, category_name,)
     ).fetchall()
     conn.close()
     return posts
