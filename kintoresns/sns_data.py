@@ -148,28 +148,23 @@ def get_posts_by_category(category_name, user_id):
     conn = get_db_connection()
     posts = conn.execute(
         '''
-<<<<<<< HEAD
-        SELECT posts.*, users.username, (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
-               (SELECT 1 FROM likes WHERE user_id = ? AND post_id = posts.id) as liked_by_me
-=======
         SELECT posts.*, users.username, 
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
->>>>>>> 71e5f0c769507a6589986934bf8b6ed3e0c90389
+        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
+        (SELECT 1 FROM likes WHERE likes.user_id = ? AND likes.post_id = posts.id) AS liked_by_me
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE posts.category LIKE ?
         ORDER BY posts.timestamp DESC
-<<<<<<< HEAD
-        ''', (user_id, category_name,)
-=======
-        ''', (f'%{category_name}%',)
->>>>>>> 71e5f0c769507a6589986934bf8b6ed3e0c90389
+        ''', (user_id, f'%{category_name}%')
     ).fetchall()
+    
     # `sqlite3.Row` オブジェクトを辞書に変換してから操作
     result = []
     for post in posts:
         post_dict = dict(post)  # 辞書に変換
         post_dict['category'] = post_dict['category'].split(',')  # カテゴリをリストに変換
         result.append(post_dict)
+    
     conn.close()
-    return posts
+    return result
+
