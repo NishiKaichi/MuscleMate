@@ -5,54 +5,60 @@
 {% endblock %}
 
 {% block contents %}
-<style>
-    .post-list{
-      max-height: 400px; /*#高さを設定*/
-      overflow-y: auto;
-    }
-    .post img {
-    max-width: 100%; /* 画像の最大幅をコンテナ幅に合わせる */
-    max-height: 300px; /* 画像の最大高さを300pxに制限 */
-    width: auto; /* 横幅は自動調整 */
-    height: auto; /* 高さも自動調整 */
-    display: block; /* ブロック要素として扱う（他の要素と衝突しない） */
-    margin: 0 auto; /* 画像を中央に配置 */
-    object-fit: cover; /* 画像がコンテナにフィットするようにする */
-    overflow: hidden; /* コンテナからはみ出た部分を隠す */
-  }
-  
-  </style>
-  
-<h3>{{ category_name }}の投稿</h3>
+    <style>
+        .post-list{
+            max-height: 400px; /*#高さを設定*/
+            overflow-y: auto;
+        }
+        .post img {
+        max-width: 100%; /* 画像の最大幅をコンテナ幅に合わせる */
+        max-height: 300px; /* 画像の最大高さを300pxに制限 */
+        width: auto; /* 横幅は自動調整 */
+        height: auto; /* 高さも自動調整 */
+        display: block; /* ブロック要素として扱う（他の要素と衝突しない） */
+        margin: 0 auto; /* 画像を中央に配置 */
+        object-fit: cover; /* 画像がコンテナにフィットするようにする */
+        overflow: hidden; /* コンテナからはみ出た部分を隠す */
+        }
 
-{% if posts | length == 0 %}
-    <div style="text-align: center;">
-    このカテゴリに投稿はありません。
-    </div>
-{% else %}
-    <div class="post-list">
-    {% for post in posts %}
-        <div class="post">
-        {{ post.content | linebreaks }}
-        <p>カテゴリ: {{ post.category }}</p>
-        {% if post.image_path %}
-        <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
-        {% endif %}
-        <p class="info">
-            {{ post.timestamp | datestr }}
-            作: <a href="/users/{{ post.user_id }}">{{ post.username }}</a>
-        </p>
-        <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
-            {% if post.liked_by_me %}
-            <button type="submit">いいねを取り消す</button>
-            {% else %}
-            <button type="submit">いいね</button>
-            {% endif %}
-        </form>
-        <span>{{ post.like_count }} いいね</span>
+    </style>
+
+    <h3>{{ category_name }}の投稿</h3>
+
+    {% if posts | length == 0 %}
+        <div style="text-align: center;">
+            このカテゴリに投稿はありません。
         </div>
-    {% endfor %}
-    </div>
-{% endif %}
+    {% else %}
+        <div class="post-list">
+            {% for post in posts %}
+                <div class="post">
+                    {{ post.content | linebreaks }}
+                    <p>カテゴリ: {{ post.category }}</p>
+                    {% if post.image_path %}
+                        <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
+                    {% endif %}
+                    <p class="info">
+                        {{ post.timestamp | datestr }}
+                        作: <a href="/users/{{ post.user_id }}">{{ post.username }}</a>
+                    </p>
+                    <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
+                        {% if post.liked_by_me %}
+                            <button type="submit">いいねを取り消す</button>
+                        {% else %}
+                            <button type="submit">いいね</button>
+                        {% endif %}
+                    </form>
+                    <span>{{ post.like_count }} いいね</span>
+                    <!-- 削除ボタンの追加 -->
+                    {% if post.user_id == user_id %}
+                        <form action="/delete_post/{{ post.id }}" method="post" style="display:inline;">
+                            <button type="submit" onclick="return confirm('本当にこの投稿を削除しますか？')">削除</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
 {% endblock %}
