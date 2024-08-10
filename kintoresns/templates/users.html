@@ -49,6 +49,7 @@
   投稿はまだありません。
   </div>
 {% else %}
+<div id="TimeLine">
   <div class="post-list">
     {% for post in posts %}
       <div class="post">
@@ -95,6 +96,7 @@
       </div>
     {% endfor %}
   </div>
+</div>
 {% endif %}
 
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "layout_login.html" %}
 {% block contents %}
   <h3>投稿</h3>
+  <div id="TimeLine"></div>
   <div class="post-list">
     <form action="/write/try" method="POST" enctype="multipart/form-data" class="pure-form">
       <textarea name="text" rows="4"></textarea>
@@ -30,6 +31,7 @@
       <button type="submit" class="pure-button pure-button-primary">投稿</button>
     </form>
   </div>
+</div>
   <br><br><br>
 {% endblock %}
 

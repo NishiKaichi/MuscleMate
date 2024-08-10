@@ -1,3 +1,10 @@
+#main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
 .login-container {
   background-color: #fff;
   padding: 20px;
@@ -7,6 +14,8 @@
   max-width: 400px;
   box-sizing: border-box;
   margin: 0 auto;
+  margin-top:auto;
+  margin-bottom:auto;
 }
 .login-container h2{
   margin-bottom: 20px;
@@ -55,32 +64,32 @@
 }
 
 #loginform {
-    padding: 4px 8px 4px 8px;
+  padding: 4px 8px 4px 8px;
 }
 
 .boxes_loginpage {
-    display: flex;
-    gap: 20px; /* 子要素間の間隔を20pxに設定 */
-    justify-content: center; /* 子要素間の空白を均等に設定 */
-    max-width: 800px; /* 最大幅を設定して中央ぞろえ */
-    margin: 0 auto; /* 左右の余白を自動で均等に設定して中央に配置 */
-  }
-  .boxes_loginpage > .logo,
-  .boxes_loginpage > .login-container {
-    margin: 0; /* 個別のマージンをリセット */
-  }
+  display: flex;
+  gap: 20px; /* 子要素間の間隔を20pxに設定 */
+  justify-content: center; /* 子要素間の空白を均等に設定 */
+  max-width: 800px; /* 最大幅を設定して中央ぞろえ */
+  margin: 0 auto; /* 左右の余白を自動で均等に設定して中央に配置 */
+}
+.boxes_loginpage > .logo,
+.boxes_loginpage > .login-container {
+  margin: 0; /* 個別のマージンをリセット */
+}
   
-  .logo_loginpage{
-    margin: 0;
-    color: #333;
-    text-align: center;
-    padding: 2.5em 2em 0;
-    border-bottom: 1px solid #eee;
-  }
+.logo_loginpage{
+  margin: 0;
+  color: #333;
+  text-align: center;
+  padding: 2.5em 2em 0;
+  border-bottom: 1px solid #eee;
+}
   
-  .logo_loginpage h1 {
-        margin: 0.2em 0;
-        font-size: 3em;
-        font-weight: 300;
-  }
+.logo_loginpage h1 {
+      margin: 0.2em 0;
+      font-size: 3em;
+      font-weight: 300;
+}
 
