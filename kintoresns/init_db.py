@@ -47,6 +47,19 @@ def init_db():
             )
         ''')
         
+        #コメントテーブル
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS comments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                post_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                content TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (post_id) REFERENCES posts (id),
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            )
+        ''')        
+        
         cur.execute("PRAGMA table_info(users)")
         columns = [col[1] for col in cur.fetchall()]
         if 'profile_image' not in columns:

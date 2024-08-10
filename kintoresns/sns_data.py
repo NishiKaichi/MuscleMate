@@ -168,3 +168,17 @@ def get_posts_by_category(category_name, user_id):
     conn.close()
     return posts
 
+#コメント取得のための関数
+def get_post_comments(post_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT comments.content, comments.timestamp, users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.post_id = ?
+        ORDER BY comments.timestamp ASC
+    ''', (post_id,))
+    comments = cur.fetchall()
+    conn.close()
+    return comments

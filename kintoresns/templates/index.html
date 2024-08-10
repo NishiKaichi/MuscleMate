@@ -43,6 +43,22 @@
             {% endif %}
           </form>
           <span>{{ i.like_count }} いいね</span>
+
+        <!-- コメント表示 -->
+        <h4>コメント</h4>
+        <div class="comments">
+          {% for comment in i.comments %}
+            <div class="comment">
+              <p><strong>{{ comment.username }}:</strong> {{ comment.content }}</p>
+              <p class="info">{{ comment.timestamp | datestr }}</p>
+            </div>
+          {% endfor %}
+        </div>
+        <!-- コメント投稿フォーム -->
+        <form action="/add_comment/{{ i.id }}" method="post" style="margin-top: 10px;">
+          <textarea name="content" rows="2" cols="40" placeholder="コメントを追加..."></textarea>
+          <button type="submit" class="pure-button pure-button-primary">コメントを投稿</button>
+        </form>
           <!-- 削除ボタンの追加 -->
           {% if i.user_id == user_id %}
             <form action="/delete_post/{{ i.id }}" method="post" style="display:inline;">
