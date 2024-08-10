@@ -101,15 +101,46 @@ def delete_post(post_id, user_id):
 #"""タイムラインを取得する"""
 def get_timelines():
     conn = get_db_connection()
-    posts = conn.execute('''
-        SELECT posts.*, users.username, 
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
+               users.username, posts.user_id,
+               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
         FROM posts
         JOIN users ON posts.user_id = users.id
         ORDER BY posts.timestamp DESC
-    ''').fetchall()
+    ''')
+    
+    posts = cur.fetchall()
+    
+    # タイムラインの各投稿に対応するコメントを取得
+    timelines = []
+    for post in posts:
+        post_id = post[0]  # posts.id
+        cur.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,))
+        comments = cur.fetchall()
+        
+        timelines.append({
+            'id': post[0],
+            'content': post[1],
+            'category': post[2],
+            'timestamp': post[3],
+            'image_path': post[4],
+            'username': post[5],
+            'user_id': post[6],
+            'like_count': post[7],
+            'comments': comments
+        })
+    
     conn.close()
-    return posts
+    return timelines
+
 
 #カテゴリを得る
 def get_category_by_post_id(post_id):
