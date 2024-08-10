@@ -1,10 +1,12 @@
 html, body {
   height: 100%;
   margin: 0;
+  padding:0;
 }
 
 body {
   font-family: Arial, sans-serif; /* フォントをArialに設定 */
+  display: flex;
   background-color: #f0f0f0; /* 背景色を淡いグレーに設定 */ 
   justify-content: center; /* 子要素を水平方向に中央揃え */
   align-items: center; /* 子要素を垂直方向に中央揃え */
@@ -21,9 +23,10 @@ body {
   box-sizing: border-box;
 }
 
-#main{
-  box-sizing: border-box;
+.page {
+  margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: none;
 }
-
-
 
