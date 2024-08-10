@@ -1,1 +1,76 @@
-/*Top_barとは別にサブbarとして,side_bar導入予定…*/
+#sidebar {
+    position: fixed; /* サイドバーを固定位置に配置 */
+    left: -300px; /* 初期位置を画面外に設定（左側） */
+    top: 127px; /* トップバーの下端にサイドバーを配置 */
+    width: 300px; /* サイドバーの幅を300pxに設定 */
+    height: calc(100% - 60px); /* 残りの高さをサイドバーに割り当て */
+    background: rgba(0, 0, 0, 0.8); /* サイドバーの背景を半透明の黒に設定 */
+    z-index: 1000; /* サイドバーを他のコンテンツの上に表示 */
+    transition: left 0.3s ease; /* サイドバーの表示・非表示にトランジションを追加 */
+    overflow-y: auto; /* サイドバー内の内容が多い場合、縦にスクロール可能に */
+}
+
+#sidebar.active {
+    left: 0; /* サイドバーが表示された状態 */
+}
+
+#sidebar .sidebar-content {
+    padding: 20px; /* サイドバー内のコンテンツに20pxのパディングを追加 */
+    color: white; /* サイドバー内のテキスト色を白に設定 */
+}
+
+/* リンクのスタイル */
+#sidebar a {
+    color: white; /* リンクのテキスト色を白に設定 */
+    text-decoration: none; /* リンクの下線を削除 */
+    display: block; /* リンクをブロック要素として表示 */
+    padding: 10px 0; /* リンクの上下に10pxの余白を追加 */
+}
+
+#sidebar a:hover {
+    text-decoration: underline; /* ホバー時にリンクに下線を表示 */
+}
+
+/* リンクの間に横線を追加 */
+#sidebar .sidebar-content ul {
+    list-style-type: none; /* リストマーカーを削除 */
+    padding: 0; /* リスト全体のパディングを削除 */
+    margin: 0; /* リスト全体のマージンを削除 */
+}
+
+#sidebar .sidebar-content ul li {
+    border-bottom: 1px solid #ffffff; /* リンク間に白色の横線を追加 */
+    padding: 10px 0; /* リンク間のスペースを調整 */
+}
+
+#sidebar .sidebar-content ul li:last-child {
+    border-bottom: none; /* 最後のリンクには横線を表示しない */
+}
+
+/* メニューリンクボタンのスタイル */
+#menuLink {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1200;
+    width: 30px; /* ボタンの幅 */
+    height: 30px; /* ボタンの高さ */
+    position: relative; /* 子要素の位置を相対的に配置 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* ボタン内の各ラインのスタイル */
+#menuLink span {
+    display: block;
+    width: 100%; /* ラインの幅をボタン全体に */
+    height: 4px; /* ラインの高さ */
+    background-color: white; /* ラインの色を白に設定 */
+    transition: all 0.3s ease; /* トランジションを追加 */
+}
+
+/* ボタンがホバーされたときのスタイル */
+#menuLink:hover span {
+    background-color: #ccc; /* ホバー時の色をグレーに変更 */
+}
