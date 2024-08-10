@@ -152,10 +152,14 @@ def user_profile(user_id):
     
     # お気に入り登録されているかどうかを確認
     is_fav = data.is_fav(current_user_id, user_id)
-    conn.close()
     
     # 投稿を取得
     posts = user.get_posts_by_user(user_id, current_user_id)
+    
+    for post in posts:
+        post["comments"]=data.get_post_comments(post["id"])
+        
+    conn.close()
     
     # ユーザープロフィールページを表示
     return render_template(
