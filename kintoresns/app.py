@@ -100,7 +100,7 @@ def toggle_like(post_id):
         data.add_like(user_id, post_id)
     return redirect(request.referrer)
 
-#俳句投稿処理
+#post投稿処理
 @app.route('/write', methods=['GET'])
 @user.login_required
 def write():
@@ -124,6 +124,15 @@ def try_write():
         data.save_post(user_id, text, categories, filename)
     
     return redirect('/')
+
+#post削除処理
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+@user.login_required
+def delete_post(post_id):
+    user_id = user.get_id()
+    data.delete_post(post_id, user_id)
+    flash('投稿が削除されました。')
+    return redirect(request.referrer)
 
 #user_idをすべてのテンプレートで自動的に利用できるようにする
 @app.context_processor
