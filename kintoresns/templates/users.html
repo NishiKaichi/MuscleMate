@@ -64,6 +64,12 @@
           {% endif %}
         </form>
         <span>{{ post.like_count }} いいね</span>
+        <!-- 削除ボタンの追加 -->
+        {% if post.user_id == user_id %}
+          <form action="/delete_post/{{ post.id }}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('本当にこの投稿を削除しますか？')">削除</button>
+          </form>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
