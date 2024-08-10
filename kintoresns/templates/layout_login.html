@@ -4,19 +4,23 @@
 <link rel="stylesheet" href="/static/css/style_main.css" />
 <link rel="stylesheet" href="/static/css/sns_contents.css" />
 <link rel="stylesheet" href="/static/css/top-bar.css" />
+<link rel="stylesheet" href="/static/css/side-bar.css" />
 {% endblock %}
 
 {% block header %}
+    <!--トップバー-->
     <div id="topbar">
         <!-- ロゴ部分 -->
         <div id="logo_toppage">
             筋トレSNS
         </div>
         <div id="menu-container">
-            <!-- メニューリンクアイコン -->
-            <a href="#menu" id="menuLink" class="menu-link">
+            <button id="menuLink">
                 <span></span>
-            </a>
+                <span></span>
+                <span></span>
+            </button>
+        
             <div id="menu">
                 <!-- カテゴリ選択フォーム -->
                 <form class="pure-form" action="{{ url_for('category_posts', category_name='all') }}" method="GET">
@@ -60,6 +64,25 @@
             </div>
         </div>
     </div>
+    <!--/トップバー-->
+    <!--サイドバー-->
+    <div id="sidebar">
+        <div class="sidebar-content">
+            <li>
+                <a href="/users/{{ user_id }}">プロフィール</a>
+            </li>
+            <li>
+                <a href="/">タイムライン</a>
+            </li>
+            <li>
+                <a href="/write">投稿</a>
+            </li>
+            <li>
+                <a href="/logout">ログアウト</a>
+            </li>
+        </div>
+    </div>
+    <!--/サイドバー-->
 {% endblock %}
 
 <!--{% block footer %}
@@ -68,5 +91,5 @@
 
 {% block add_java_script %}
 <script src="/static/js/style_main.js"></script>
-<script src="/static/js/ui.js"></script>
+<script src="/static/js/side_bar_UI.js"></script>
 {% endblock %}
