@@ -85,3 +85,24 @@ h3 {
 textarea {
     width: 99%; /* 幅を99%に設定 */
 }
+
+.profile-section {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center; /* 中央に配置 */
+    align-items: center; /* 垂直方向に中央揃え */
+    flex-direction: column; /* 子要素を縦に並べる */
+}
+
+.profile-image-wrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

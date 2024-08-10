@@ -44,7 +44,7 @@
                         {% endfor %}
                     </div>
                               <!-- コメント投稿フォーム -->
-                    <form action="/add_comment/{{ i.id }}" method="post" style="margin-top: 10px;">
+                    <form action="/add_comment/{{ post.id }}" method="post" style="margin-top: 10px;">
                      <textarea name="content" rows="2" cols="40" placeholder="コメントを追加..."></textarea>
                      <button type="submit" class="pure-button pure-button-primary">コメントを投稿</button>
                     </form>

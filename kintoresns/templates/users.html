@@ -10,11 +10,16 @@
 </div>
 
 <!-- プロフィール画像の表示 -->
-<div class="profile-section" style="text-align: center; margin-bottom: 20px;">
+<link rel="stylesheet" href="/static/css/sns_contents.css" />
+<div class="profile-section">
     {% if user_info.profile_image %}
-        <img src="{{ url_for('static', filename='uploads/' ~ user_info.profile_image) }}" alt="プロフィール画像" class="profile-image">
+    <img src="{{ url_for('static', filename='uploads/' ~ user_info.profile_image) }}" 
+    alt="プロフィール画像" 
+    style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);" />
     {% else %}
-        <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="デフォルトプロフィール画像" class="profile-image">
+      <div class="profile-image-wrapper">
+          <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="No Images" class="profile-image">
+      </div>
     {% endif %}
     <div>{{ user_info.username }}</div>
     
