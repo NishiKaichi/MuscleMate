@@ -100,7 +100,7 @@ def toggle_like(post_id):
         data.add_like(user_id, post_id)
     return redirect(request.referrer)
 
-#俳句投稿処理
+#post投稿処理
 @app.route('/write', methods=['GET'])
 @user.login_required
 def write():
@@ -112,7 +112,7 @@ def write():
 def try_write():
     user_id = user.get_id()
     text = request.form.get("text", "")
-    category = request.form.get("category")
+    categories = request.form.getlist("category")
     file = request.files.get('image')
     filename = None
     
@@ -121,10 +121,24 @@ def try_write():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     
     if text:
-        data.save_post(user_id, text, category, filename)
+        data.save_post(user_id, text, categories, filename)
     
     return redirect('/')
 
+#post削除処理
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+@user.login_required
+def delete_post(post_id):
+    user_id = user.get_id()
+    data.delete_post(post_id, user_id)
+    flash('投稿が削除されました。')
+    return redirect(request.referrer)
+
+#user_idをすべてのテンプレートで自動的に利用できるようにする
+@app.context_processor
+def inject_user_id():
+    user_id = user.get_id() if user.is_login() else None
+    return dict(user_id=user_id)
 
 @app.route('/users/<int:user_id>')
 @user.login_required
