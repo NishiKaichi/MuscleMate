@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/pure-min.css" />
-    <link rel="stylesheet" href="/static/style_basis.css" />
+    <link rel="stylesheet" href="/static/css/pure-min.css" />
+    <link rel="stylesheet" href="/static/css/style_basis.css" />
     {% block add_stylesheet %}{% endblock %}<!--cssの追加用ブロック-->
     <title>{% block title %}SNS-デモ{% endblock %}</title>
   </head>
@@ -32,6 +32,6 @@
     </div>
     <!-- end of #layout -->
 
-    {% block footer_script %}{% endblock %}
+    {% block add_java_script %}{% endblock %}
   </body>
 </html>

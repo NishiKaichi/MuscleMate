@@ -1,7 +1,13 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: Arial, sans-serif; /* フォントをArialに設定 */
   background-color: #f0f0f0; /* 背景色を淡いグレーに設定 */
   display: flex; /* 子要素をフレックスボックスとして表示 */
+  flex-direction: column;
   justify-content: center; /* 子要素を水平方向に中央揃え */
   align-items: center; /* 子要素を垂直方向に中央揃え */
   height: 100vh; /* ビューポートの高さを100%に設定 */

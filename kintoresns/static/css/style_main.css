@@ -1,8 +1,12 @@
 #main {
-    max-width: 800px; /* 最大幅を800pxに設定 */
-    margin: 0 auto; /* 自動的に中央揃え */
-    background: #fabf88; /* 背景色を設定 */
+    max-width: 800px;
+    margin: 0 auto; /* 左右中央揃え */
+    /*margin-top: 0; /* 初期値として設定 */
+    padding-top: 0px;
+    background: #fabf88;
+    flex: 1;
 }
+
 
 footer {
     position: fixed; /* 固定位置に配置 */

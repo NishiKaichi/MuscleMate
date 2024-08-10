@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
 {% block add_stylesheet %}<!-- CSSの追加 -->
-<link rel="stylesheet" href="/static/style_main.css" />
-<link rel="stylesheet" href="/static/sns_contents.css" />
-<link rel="stylesheet" href="/static/top-bar.css" />
+<link rel="stylesheet" href="/static/css/style_main.css" />
+<link rel="stylesheet" href="/static/css/sns_contents.css" />
+<link rel="stylesheet" href="/static/css/top-bar.css" />
 {% endblock %}
 
 {% block header %}
@@ -63,11 +63,10 @@
 {% endblock %}
 
 {% block footer %}
-<!-- フッター -->
 <p class="footer"><a href="/" class="pure-button">トップページへ</a></p>        
 {% endblock %}
 
-{% block footer_script %}
-<!-- フッター用スクリプト -->
-<script src="/static/ui.js"></script>
+{% block add_java_script %}
+<script src="/static/js/style_main.js"></script>
+<script src="/static/js/ui.js"></script>
 {% endblock %}

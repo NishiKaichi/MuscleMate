@@ -25,13 +25,9 @@ h3 {
 }
 
 .post-list {
-    max-height: 400px; /* リストの最大高さを400pxに設定 */
+    height: 100%; /* 親要素の高さに合わせる */
+    max-height: 700px; /* 高さ制限を解除 */
     overflow-y: auto; /* 縦方向にスクロール可能にする */
-}
-
-.post-list {
-    max-height: 100%; /* 最大高さを100%に設定 */
-    overflow-y: auto; /* 縦方向のスクロールを自動化 */
     margin: 0 auto; /* タイムラインを中央揃え */
 }
 
