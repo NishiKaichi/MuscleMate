@@ -8,7 +8,81 @@
 {% block header %}
 
     <div id="topbar">
+        <!-- ロゴ部分 -->{% extends "layout.html" %}
+
+{% block add_stylesheet %}<!-- CSSの追加 -->
+<link rel="stylesheet" href="/static/style_login.css" />
+<link rel="stylesheet" href="/static/top-bar.css" />
+{% endblock %}
+
+{% block header %}
+<header>
+    <div id="topbar">
         <!-- ロゴ部分 -->
+        <div id="logo_toppage">
+            筋トレSNS
+        </div>
+        <div id="menu-container">
+            <!-- メニューリンクアイコン -->
+            <a href="#menu" id="menuLink" class="menu-link">
+                <span></span>
+            </a>
+            <div id="menu">
+                <!-- カテゴリ選択フォーム -->
+                <form class="pure-form" action="{{ url_for('category_posts', category_name='all') }}" method="GET">
+                    <select name="category" class="pure-input-rounded" onchange="window.location.href='/category/' + this.value;">
+                        <option value="all">カテゴリ検索</option>
+                        <option value="自重トレ">自重トレ</option>
+                        <option value="マシントレ">マシントレ</option>
+                        <option value="ウェイトトレ">ウェイトトレ</option>
+                        <option value="初心者向け">初心者向け</option>
+                        <option value="家トレ">家トレ</option>
+                        <option value="足トレ">足トレ</option>
+                        <option value="腕トレ">腕トレ</option>
+                        <option value="胸トレ">胸トレ</option>
+                        <option value="肩トレ">肩トレ</option>
+                        <option value="背中トレ">背中トレ</option>
+                        <option value="全身トレ">全身トレ</option>
+                        <option value="体幹トレ">体幹トレ</option>
+                        <option value="ストレッチ">ストレッチ</option>
+                        <option value="有酸素">有酸素</option>
+                        <option value="その他">その他</option>
+                        <!-- 他のカテゴリを追加 -->
+                    </select>
+                </form>
+                <!-- メニュー項目 -->
+                <div class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item">
+                            <a href="/users/{{ user_id }}" class="pure-menu-link">プロフィール</a>
+                        </li>
+                        <li class="pure-menu-item">
+                            <a href="/" class="pure-menu-link">タイムライン</a>
+                        </li>
+                        <li class="pure-menu-item">
+                            <a href="/write" class="pure-menu-link">投稿</a>
+                        </li>
+                        <li class="pure-menu-item">
+                            <a href="/logout" class="pure-menu-link">ログアウト</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block footer %}
+<!-- フッター -->
+<p class="footer"><a href="/" class="pure-button">トップページへ</a></p>        
+{% endblock %}
+
+{% block footer_script %}
+<!-- フッター用スクリプト -->
+<script src="/static/ui.js"></script>
+{% endblock %}
+
         <div id="logo_toppage">
             筋トレSNS
         </div>

@@ -3,6 +3,7 @@
 {% block contents %}
 
 
+
 {# お気に入り登録しているユーザーの一覧を表示 #}
 <div class="box_index pure-menu-horizontal pure-menu-scrollable">
   お気に入りのトレーニー:
@@ -44,6 +45,12 @@
         {% endif %}
       </form>
       <span>{{ i.like_count }} いいね</span>
+      <!-- 削除ボタンの追加 -->
+      {% if i.user_id == user_id %}
+        <form action="/delete_post/{{ i.id }}" method="post" style="display:inline;">
+          <button type="submit" onclick="return confirm('本当にこの投稿を削除しますか？')">削除</button>
+        </form>
+      {% endif %}
     </div>
   {% endfor %}
 {% endif %}
