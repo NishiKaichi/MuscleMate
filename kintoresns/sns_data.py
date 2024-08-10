@@ -166,5 +166,5 @@ def get_posts_by_category(category_name, user_id):
         result.append(post_dict)
     
     conn.close()
-    return result
+    return posts
 
