@@ -112,7 +112,7 @@ def write():
 def try_write():
     user_id = user.get_id()
     text = request.form.get("text", "")
-    category = request.form.get("category")
+    categories = request.form.getlist("category")
     file = request.files.get('image')
     filename = None
     
@@ -121,7 +121,7 @@ def try_write():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     
     if text:
-        data.save_post(user_id, text, category, filename)
+        data.save_post(user_id, text, categories, filename)
     
     return redirect('/')
 
