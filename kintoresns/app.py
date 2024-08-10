@@ -165,7 +165,21 @@ def user_profile(user_id):
         'users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,
     )
 
-# プロフィール画像のアップロード
+#ユーザーページに自己紹介文を追加
+@app.route('/edit_bio', methods=['POST'])
+@user.login_required
+def edit_bio():
+    user_id = user.get_id()
+    bio = request.form.get('bio', '')
+
+    conn = data.get_db_connection()
+    conn.execute('UPDATE users SET bio = ? WHERE id = ?', (bio, user_id))
+    conn.commit()
+    conn.close()
+
+    return redirect(f'/users/{user_id}')
+
+#プロフィール画像のアップロード
 @app.route('/upload_profile_image', methods=['POST'])
 @user.login_required
 def upload_profile_image():
