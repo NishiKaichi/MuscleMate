@@ -123,17 +123,19 @@ def delete_post(post_id, user_id):
     conn.close()
 
 # タイムラインを取得する
-def get_timelines():
+def get_timelines(current_user_id):
     conn = get_db_connection()
     cur = conn.cursor()
+    
     cur.execute('''
-        SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
-               users.username, posts.user_id,
-               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        ORDER BY posts.timestamp DESC
-    ''')
+    SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
+           users.username, posts.user_id,
+           (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
+           EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS liked_by_me
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    ORDER BY posts.timestamp DESC
+''', (current_user_id,))
     
     posts = cur.fetchall()
     
@@ -159,6 +161,7 @@ def get_timelines():
             'username': post[5],
             'user_id': post[6],
             'like_count': post[7],
+            'liked_by_me': post[8],  # 追加
             'comments': comments
         })
     
