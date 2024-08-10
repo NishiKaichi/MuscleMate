@@ -125,6 +125,11 @@ def try_write():
     
     return redirect('/')
 
+#user_idをすべてのテンプレートで自動的に利用できるようにする
+@app.context_processor
+def inject_user_id():
+    user_id = user.get_id() if user.is_login() else None
+    return dict(user_id=user_id)
 
 @app.route('/users/<int:user_id>')
 @user.login_required
