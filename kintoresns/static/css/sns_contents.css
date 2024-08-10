@@ -12,6 +12,10 @@ h3 {
     width: 100%; /* 幅を100%に設定 */
 }
 
+#TimeLine{
+    overflow-y: auto; /* 縦方向にスクロール可能にする */
+}
+
 .post {
     border: 1px solid silver; /* 銀色の実線ボーダーを設定 */
     background-color: #f9f9fe; /* 背景色を淡い青紫に設定 */
@@ -25,9 +29,9 @@ h3 {
 }
 
 .post-list {
-    height: 100%; /* 親要素の高さに合わせる */
-    max-height: 700px; /* 高さ制限を解除 */
-    overflow-y: auto; /* 縦方向にスクロール可能にする */
+    height: auto; /* 親要素の高さに合わせる */
+    box-sizing: border-box; /* パディングとボーダーを含めたサイズ計算 */
+    max-height: none; /* JavaScriptで max-height を設定するので初期は none にしておく */
     margin: 0 auto; /* タイムラインを中央揃え */
 }
 
