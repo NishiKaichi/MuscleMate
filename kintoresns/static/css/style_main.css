@@ -1,7 +1,7 @@
 #main {
     max-width: 800px;
     margin: 0 auto; /* 左右中央揃え */
-    background: #fabf88;
+    
     overflow-y: hidden; /* スクロールを管理するために overflow-y を設定 */
     box-sizing: border-box; /* パディングとボーダーを含めたサイズ計算 */
     height: auto; /* JavaScriptで高さを設定するので初期は auto にしておく */
