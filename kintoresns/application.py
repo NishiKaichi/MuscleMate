@@ -148,23 +148,59 @@ def user_profile(user_id):
     # ユーザー情報を取得
     user_info = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
     if user_info is None:
+        conn.close()
         return render_template('404.html'), 404  # ユーザーが存在しない場合は404エラーページを表示
     
     # お気に入り登録されているかどうかを確認
     is_fav = data.is_fav(current_user_id, user_id)
     
     # 投稿を取得
-    posts = user.get_posts_by_user(user_id, current_user_id)
+    posts = conn.execute('''
+        SELECT posts.id, posts.title, posts.content, posts.category, posts.timestamp, posts.image_path,
+               users.username, posts.user_id,
+               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
+               EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS liked_by_me
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE posts.user_id = ?
+        ORDER BY posts.timestamp DESC
+    ''', (current_user_id, user_id)).fetchall()
+    
+    result = []
     
     for post in posts:
-        post["comments"] = data.get_post_comments(post["id"])
+        post_id = post[0]
         
+        # 各投稿に対応するコメントを取得
+        comments = conn.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,)).fetchall()
+
+        result.append({
+            'id': post[0],
+            'title': post[1],
+            'content': post[2],
+            'category': post[3],
+            'timestamp': post[4],
+            'image_path': post[5],
+            'username': post[6],
+            'user_id': post[7],
+            'like_count': post[8],
+            'liked_by_me': post[9],
+            'comments': comments
+        })
+    
     conn.close()
     
     # ユーザープロフィールページを表示
     return render_template(
-        'users.html', user_info=user_info, posts=posts, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,
+        'users.html', user_info=user_info, posts=result, is_fav=is_fav, user_id=user.get_id(), current_user_id=current_user_id,
     )
+
 
 #ユーザーページに自己紹介文を追加
 @app.route('/edit_bio', methods=['POST'])
