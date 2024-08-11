@@ -1,54 +1,72 @@
-{% extends "layout_login.html" %}
-
-{% block title %}
-  {{ user_info['username'] }}さんの筋トレページ
-{% endblock %}
-
-{% block contents %}
-<div style="text-align: center;">
+{% extends "layout_login.html" %} {% block title %} {{ user_info['username']
+}}さんの筋トレページ {% endblock %} {% block contents %}
+<div style="text-align: center">
   {{ user_info['username'] }}さんの筋トレページ
 </div>
 
 <!-- 自己紹介文の表示 -->
-<div style="margin-bottom: 20px;">
+<div style="margin-bottom: 20px">
   <h3>自己紹介</h3>
   {% if user_info.bio %}
-      <p>{{ user_info.bio | linebreaks }}</p>
+  <p>{{ user_info.bio | linebreaks }}</p>
   {% else %}
-      <p>自己紹介文がまだありません。</p>
+  <p>自己紹介文がまだありません。</p>
   {% endif %}
 
   <!-- 自己紹介文の編集フォーム（自分のプロフィールページのみ表示） -->
   {% if user_info.id == current_user_id %}
-  <form action="/edit_bio" method="POST" style="margin-top: 10px;">
-      <textarea name="bio" rows="4" cols="50">{{ user_info.bio }}</textarea>
-      <br>
-      <button type="submit" class="pure-button pure-button-primary">保存</button>
+  <form action="/edit_bio" method="POST" style="margin-top: 10px">
+    <textarea name="bio" rows="4" cols="50">{{ user_info.bio }}</textarea>
+    <br />
+    <button type="submit" class="pure-button pure-button-primary">保存</button>
   </form>
   {% endif %}
 </div>
 
 <!-- プロフィール画像の表示 -->
-<div class="profile-section" style="text-align: center; margin-bottom: 20px;">
-    {% if user_info.profile_image %}
-    <img src="{{ url_for('static', filename='uploads/' ~ user_info.profile_image) }}" 
-    alt="プロフィール画像" 
-    style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);" />
-    {% else %}
-      <div class="profile-image-wrapper">
-          <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="No Images" class="profile-image">
-      </div>
-    {% endif %}
-    <div>{{ user_info.username }}</div>
-    
-    <!-- プロフィール画像の編集（自分のプロフィールページのみ表示） -->
-    {% if user_info.id == current_user_id %}
-    <form action="/upload_profile_image" method="POST" enctype="multipart/form-data" style="margin-top: 10px;">
-        <label for="profile_image">プロフィール画像をアップロード:</label>
-        <input type="file" name="profile_image" id="profile_image">
-        <button type="submit" class="pure-button pure-button-primary">アップロード</button>
-    </form>
-    {% endif %}
+<div class="profile-section" style="text-align: center; margin-bottom: 20px">
+  {% if user_info.profile_image %}
+  <img
+    src="{{ url_for('static', filename='uploads/' ~ user_info.profile_image) }}"
+    alt="プロフィール画像"
+    style="
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    "
+  />
+  {% else %}
+  <div class="profile-image-wrapper">
+    <img
+      src="{{ url_for('static', filename='uploads/default.png') }}"
+      alt="No Images"
+      class="profile-image"
+    />
+  </div>
+  {% endif %}
+  <div>{{ user_info.username }}</div>
+
+  <!-- プロフィール画像の編集 -->
+  {% if user_info.id == current_user_id %}
+  <form
+    action="/upload_profile_image"
+    method="POST"
+    enctype="multipart/form-data"
+    style="margin-top: 10px"
+    id="profile-image-form"
+  >
+    <label for="profile_image">プロフィール画像をアップロード:</label>
+    <input
+      type="file"
+      name="profile_image"
+      id="profile_image"
+      onchange="uploadImage()"
+    />
+  </form>
+  {% endif %}
 </div>
 
 {% if user_info['id'] != current_user_id %}
@@ -58,7 +76,7 @@
     <button type="submit" class="pure-button">お気に入り解除</button>
   </form>
   {% else %}
-    <form action="/add_fav/{{ user_info['id'] }}" method="POST">
+  <form action="/add_fav/{{ user_info['id'] }}" method="POST">
     <button type="submit" class="pure-button">お気に入り追加</button>
   </form>
   {% endif %}
@@ -68,57 +86,81 @@
 <h3>投稿</h3>
 
 {% if posts | length == 0 %}
-  <div style="text-align: center;">
-  投稿はまだありません。
-  </div>
+<div style="text-align: center">投稿はまだありません。</div>
 {% else %}
 <div id="TimeLine">
   <div class="post-list">
     {% for post in posts %}
-      <div class="post">
-        {{ post.content | linebreaks }}
-        <p>カテゴリ: {{ post.category }}</p>
-        {% if post.image_path %}
-        <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
-        {% endif %}
-        
-        
-        <!-- いいね機能 -->
-        <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
-          {% if post.liked_by_me %}
-          <button type="submit">いいねを取り消す</button>
-          {% else %}
-          <button type="submit">いいね</button>
-          {% endif %}
-        </form>
-        <span>{{ post.like_count }} いいね</span>
-        
-        <!-- 削除ボタン -->
-        {% if user_info.id == current_user_id %}
-          <form action="/delete_post/{{ post.id }}" method="post" style="display:inline;">
-            <button type="submit" onclick="return confirm('本当にこの投稿を削除しますか？')">削除</button>
-          </form>
-        {% endif %}
+    <div class="post">
+      {{ post.content | linebreaks }}
+      <p>カテゴリ: {{ post.category }}</p>
+      {% if post.image_path %}
+      <br /><img
+        src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}"
+        alt="Image"
+      />
+      {% endif %}
 
-        <!-- コメント表示 -->
-        <h4>コメント</h4>
-        <div class="comments">
-          {% for comment in post.comments %}
-            <div class="comment">
-              <p><strong>{{ comment.username }}:</strong> {{ comment.content }}</p>
-            </div>
-          {% endfor %}
+      <!-- いいね機能 -->
+      <form
+        action="/toggle_like/{{ post.id }}"
+        method="post"
+        style="display: inline"
+      >
+        {% if post.liked_by_me %}
+        <button type="submit">いいねを取り消す</button>
+        {% else %}
+        <button type="submit">いいね</button>
+        {% endif %}
+      </form>
+      <span>{{ post.like_count }} いいね</span>
+
+      <!-- 削除ボタン -->
+      {% if user_info.id == current_user_id %}
+      <form
+        action="/delete_post/{{ post.id }}"
+        method="post"
+        style="display: inline"
+      >
+        <button
+          type="submit"
+          onclick="return confirm('本当にこの投稿を削除しますか？')"
+        >
+          削除
+        </button>
+      </form>
+      {% endif %}
+
+      <!-- コメント表示 -->
+      <h4>コメント</h4>
+      <div class="comments">
+        {% for comment in post.comments %}
+        <div class="comment">
+          <p><strong>{{ comment.username }}:</strong> {{ comment.content }}</p>
         </div>
-
-        <!-- コメントフォーム -->
-        <form action="/add_comment/{{ post.id }}" method="post" style="margin-top: 10px;">
-          <textarea name="content" rows="2" cols="40" placeholder="コメントを追加..."></textarea>
-          <button type="submit" class="pure-button pure-button-primary">コメントを投稿</button>
-        </form>
+        {% endfor %}
       </div>
+
+      <!-- コメントフォーム -->
+      <form
+        action="/add_comment/{{ post.id }}"
+        method="post"
+        style="margin-top: 10px"
+      >
+        <textarea
+          name="content"
+          rows="2"
+          cols="40"
+          placeholder="コメントを追加..."
+        ></textarea>
+        <button type="submit" class="pure-button pure-button-primary">
+          コメントを投稿
+        </button>
+      </form>
+    </div>
     {% endfor %}
   </div>
 </div>
-{% endif %}
-
+{% endif %} {% endblock %} {% block add_java_script %}
+<script src="/static/js/upload_image.js"></script>
 {% endblock %}
