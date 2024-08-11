@@ -1,5 +1,29 @@
-{% extends "layout_login.html" %} {% block title %} {{ user_info['username']
-}}さんの筋トレページ {% endblock %} {% block contents %}
+{% extends "layout_login.html" %}
+
+{% block title %}
+{{ user_info['username'] }}さんの筋トレページ
+{% endblock %}
+
+{% block contents %}
+<div id="sidebar">
+  <div class="sidebar-content">
+    <button id="allTrainee">すべての人</button>
+    <li>
+      <a href="/users/{{ user_id }}">プロフィール</a>
+    </li>
+    <li>
+      <a href="/write">投稿</a>
+    </li>
+    <li>
+      <a href="/notifications">通知</a>
+    </li>
+    <li>
+      <a href="/logout">ログアウト</a>
+    </li>
+  </div>
+</div>
+<!--/サイドバー-->
+
 <div style="text-align: center">
   {{ user_info['username'] }}さんの筋トレページ
 </div>
@@ -91,31 +115,16 @@
 <div id="TimeLine">
   <div class="post-list">
     {% for post in posts %}
-      <div class="post">
-        <h2>{{ post.title }}</h2>
-        {{ post.content | linebreaks }}
-        <p>カテゴリ: {{ post.category }}</p>
-        {% if post.image_path %}
-        <br><img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" alt="Image">
-        {% endif %}
-        
-        
-        <!-- いいね機能 -->
-        <form action="/toggle_like/{{ post.id }}" method="post" style="display:inline;">
-          {% if post.liked_by_me %}
-          <button type="submit">いいねを取り消す</button>
-          {% else %}
-          <button type="submit">いいね</button>
-          {% endif %}
-        </form>
-        <span>{{ post.like_count }} いいね</span>
-        
-        <!-- 削除ボタン -->
-        {% if user_info.id == current_user_id %}
-          <form action="/delete_post/{{ post.id }}" method="post" style="display:inline;">
-            <button type="submit" onclick="return confirm('本当にこの投稿を削除しますか？')">削除</button>
-          </form>
-        {% endif %}
+    <div class="post">
+      <h2>{{ post.title }}</h2>
+      {{ post.content | linebreaks }}
+      <p>カテゴリ: {{ post.category }}</p>
+      {% if post.image_path %}
+      <br /><img
+        src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}"
+        alt="Image"
+      />
+      {% endif %}
 
       <!-- コメント表示 -->
       <h4>コメント</h4>
@@ -147,6 +156,21 @@
     {% endfor %}
   </div>
 </div>
-{% endif %} {% endblock %} {% block add_java_script %}
+{% endif %}
+{% endblock %}
+
+<div id="allUsersPanel" class="hidden">
+  <div class="box_index pure-menu-horizontal pure-menu-scrollable">
+    すべてのトレーニー: {% for u in users %}
+    <a class="pure-button" href="/users/{{ u.user_id }}">{{ u.username }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+{% block add_java_script %}
 <script src="/static/js/upload_image.js"></script>
+<script src="/static/js/style_main.js"></script>
+<script src="/static/js/side_bar_UI.js"></script>
+<script src="/static/js/favTrainee.js"></script>
+<script src="/static/js/allTrainee.js"></script>
 {% endblock %}
