@@ -128,14 +128,14 @@ def get_timelines(current_user_id):
     cur = conn.cursor()
     
     cur.execute('''
-    SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
+    SELECT posts.id, posts.title, posts.content, posts.category, posts.timestamp, posts.image_path,
            users.username, posts.user_id,
            (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count,
            EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS liked_by_me
     FROM posts
     JOIN users ON posts.user_id = users.id
     ORDER BY posts.timestamp DESC
-''', (current_user_id,))
+    ''', (current_user_id,))
     
     posts = cur.fetchall()
     
@@ -154,14 +154,15 @@ def get_timelines(current_user_id):
         
         timelines.append({
             'id': post[0],
-            'content': post[1],
-            'category': post[2],
-            'timestamp': post[3],
-            'image_path': post[4],
-            'username': post[5],
-            'user_id': post[6],
-            'like_count': post[7],
-            'liked_by_me': post[8],  # 追加
+            'title': post[1],  # タイトルを追加
+            'content': post[2],
+            'category': post[3],
+            'timestamp': post[4],
+            'image_path': post[5],
+            'username': post[6],
+            'user_id': post[7],
+            'like_count': post[8],
+            'liked_by_me': post[9],  # liked_by_meはインデックスが9になります
             'comments': comments
         })
     
