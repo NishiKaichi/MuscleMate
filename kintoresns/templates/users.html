@@ -117,36 +117,6 @@
           </form>
         {% endif %}
 
-      <!-- いいね機能 -->
-      <form
-        action="/toggle_like/{{ post.id }}"
-        method="post"
-        style="display: inline"
-      >
-        {% if post.liked_by_me %}
-        <button type="submit">いいねを取り消す</button>
-        {% else %}
-        <button type="submit">いいね</button>
-        {% endif %}
-      </form>
-      <span>{{ post.like_count }} いいね</span>
-
-      <!-- 削除ボタン -->
-      {% if user_info.id == current_user_id %}
-      <form
-        action="/delete_post/{{ post.id }}"
-        method="post"
-        style="display: inline"
-      >
-        <button
-          type="submit"
-          onclick="return confirm('本当にこの投稿を削除しますか？')"
-        >
-          削除
-        </button>
-      </form>
-      {% endif %}
-
       <!-- コメント表示 -->
       <h4>コメント</h4>
       <div class="comments">
