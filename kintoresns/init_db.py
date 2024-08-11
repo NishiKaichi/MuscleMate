@@ -19,6 +19,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS posts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
+                title TEXT NOT NULL DEFAULT '',
                 content TEXT NOT NULL,
                 category TEXT, 
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -27,7 +28,7 @@ def init_db():
             )
         ''')
 
-        # その他のテーブル作成
+        # favsテーブルの作成
         cur.execute('''
             CREATE TABLE IF NOT EXISTS favs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,6 +39,7 @@ def init_db():
             )
         ''')
         
+        # likesテーブルの作成
         cur.execute('''
             CREATE TABLE IF NOT EXISTS likes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,7 +50,7 @@ def init_db():
             )
         ''')
         
-        # コメントテーブル
+        # コメントテーブルの作成
         cur.execute('''
             CREATE TABLE IF NOT EXISTS comments (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,17 +75,20 @@ def init_db():
             )
         ''')
         
-        # 既存のテーブルにカラムが存在しない場合の処理
+        # 既存のusersテーブルにカラムが存在しない場合の処理
         cur.execute("PRAGMA table_info(users)")
         columns = [col[1] for col in cur.fetchall()]
         if 'profile_image' not in columns:
             cur.execute('ALTER TABLE users ADD COLUMN profile_image TEXT')
 
-        # 既存のテーブルにカラムが存在しない場合の処理
-        cur.execute("PRAGMA table_info(users)")
-        columns = [col[1] for col in cur.fetchall()]
         if 'bio' not in columns:
             cur.execute('ALTER TABLE users ADD COLUMN bio TEXT')
+
+        # 既存のpostsテーブルに'title'カラムが存在しない場合の処理
+        cur.execute("PRAGMA table_info(posts)")
+        columns = [col[1] for col in cur.fetchall()]
+        if 'title' not in columns:
+            cur.execute('ALTER TABLE posts ADD COLUMN title TEXT NOT NULL DEFAULT ""')
 
     conn.commit()
 

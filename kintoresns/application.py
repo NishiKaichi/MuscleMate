@@ -110,6 +110,7 @@ def write():
 @user.login_required
 def try_write():
     user_id = user.get_id()
+    title=request.form.get("title")
     text = request.form.get("text", "")
     categories = request.form.getlist("category")
     file = request.files.get('image')
@@ -120,7 +121,7 @@ def try_write():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     
     if text:
-        data.save_post(user_id, text, categories, filename)
+        data.save_post(user_id,title, text, categories, filename)
     
     return redirect('/')
 

@@ -4,10 +4,16 @@
   <div id="TimeLine"></div>
   <div class="post-list">
     <form action="/write/try" method="POST" enctype="multipart/form-data" class="pure-form">
-      <textarea name="text" rows="4"></textarea>
+      <label for="title">タイトル:</label>
+      <input type="text" id="title" name="title" required style="width: 700px; height: 40px;">
+      <br><br>
+      <label for="content">内容(筋トレ内容や注意点など):</label>
+      <textarea name="text" rows="7"></textarea>
       <br><br>
       <label for="category">カテゴリを選択(複数選択可):</label>
-      <select id="category" name="category" multiple>
+      <select id="category" name="category"style="width:300px;height:200px" multiple>
+          <option value="メニュー紹介">メニュー紹介</option>
+          <option value="筋トレ日記">筋トレ日記</option>
           <option value="自重トレ">自重トレ</option>
           <option value="マシントレ">マシントレ</option>
           <option value="ウェイトトレ">ウェイトトレ</option>
@@ -26,6 +32,7 @@
           <!-- 他のカテゴリを追加 -->
       </select>
       <br><br>
+      <label for="images">画像の追加:</label>
       <input type="file" name="image">
       <br><br>
       <button type="submit" class="pure-button pure-button-primary">投稿</button>

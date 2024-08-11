@@ -93,21 +93,21 @@ def is_liked_by_user(user_id, post_id):
     return like is not None
 
 # postを保存する
-def save_post(user_id, content, categories, image_path=None):
+def save_post(user_id, title,content, categories, image_path=None):
     conn = get_db_connection()
     try:
         # リストのカテゴリをカンマで結合して文字列にする
         categories_str = ','.join(categories)  
         if image_path:
             conn.execute('''
-                INSERT INTO posts (user_id, content, category, timestamp, image_path) 
-                VALUES (?, ?, ?, datetime("now"), ?)
-            ''', (user_id, content, categories_str, image_path))
+                INSERT INTO posts (user_id,title, content, category, timestamp, image_path) 
+                VALUES (?, ?, ?, ? ,datetime("now"), ?)
+            ''', (user_id, title,content, categories_str, image_path))
         else:
             conn.execute('''
-                INSERT INTO posts (user_id, content, category, timestamp) 
-                VALUES (?, ?, ?, datetime("now"))
-            ''', (user_id, content, categories_str))
+                INSERT INTO posts (user_id, title,content, category, timestamp) 
+                VALUES (?, ?, ?, ?,datetime("now"))
+            ''', (user_id, title,content, categories_str))
         conn.commit()
     finally:
         conn.close()
@@ -180,60 +180,26 @@ def get_category_by_post_id(post_id):
 # 全投稿を取得する
 def get_all_posts():
     conn = get_db_connection()
-    result = conn.execute(
+    cur = conn.cursor()
+    
+    # 投稿の取得
+    posts = cur.execute(
         '''
-        SELECT posts.*, users.username, 
-        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        SELECT posts.id, posts.title, posts.content, posts.category, posts.timestamp, posts.image_path, 
+               users.username, posts.user_id, 
+               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
         FROM posts
         JOIN users ON posts.user_id = users.id
         ORDER BY posts.timestamp DESC
         '''
     ).fetchall()
 
-    for post in result:
-        post_id=post[0]
-        conn.execute('''
-            SELECT comments.content, comments.timestamp, users.username
-            FROM comments
-            JOIN users ON comments.user_id = users.id
-            WHERE comments.post_id = ?
-            ORDER BY comments.timestamp ASC
-        ''', (post_id,))
-        comments=conn.fetchall()
-        result.append({
-            'id': post[0],
-            'content': post[1],
-            'category': post[2],
-            'timestamp': post[3],
-            'image_path': post[4],
-            'username': post[5],
-            'user_id': post[6],
-            'like_count': post[7],
-            'comments': comments
-        })
-
-    conn.close()
-    return result
-
-#カテゴリに基づいて投稿を取得する
-def get_posts_by_category(category_name):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('''
-        SELECT posts.id, posts.content, posts.category, posts.timestamp, posts.image_path,
-               users.username, posts.user_id,
-               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        WHERE posts.category LIKE ?
-        ORDER BY posts.timestamp DESC
-    ''', (f'%{category_name}%',))
-    
     result = []
-    
-    # 各投稿に対応するコメントを取得
-    for post in cur.fetchall():
-        post_id = post[0]  # posts.id
+
+    for post in posts:
+        post_id = post[0]
+        
+        # コメントの取得
         cur.execute('''
             SELECT comments.content, comments.timestamp, users.username
             FROM comments
@@ -242,16 +208,65 @@ def get_posts_by_category(category_name):
             ORDER BY comments.timestamp ASC
         ''', (post_id,))
         comments = cur.fetchall()
-        
+
         result.append({
             'id': post[0],
-            'content': post[1],
-            'category': post[2],
-            'timestamp': post[3],
-            'image_path': post[4],
-            'username': post[5],
-            'user_id': post[6],
-            'like_count': post[7],
+            'title': post[1],
+            'content': post[2],
+            'category': post[3],
+            'timestamp': post[4],
+            'image_path': post[5],
+            'username': post[6],
+            'user_id': post[7],
+            'like_count': post[8],
+            'comments': comments
+        })
+
+    conn.close()
+    return result
+
+
+#カテゴリに基づいて投稿を取得する
+def get_posts_by_category(category_name):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    
+    # カテゴリに基づいて投稿を取得する
+    posts = cur.execute('''
+        SELECT posts.id, posts.title, posts.content, posts.category, posts.timestamp, posts.image_path, 
+               users.username, posts.user_id,
+               (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) AS like_count
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE posts.category LIKE ?
+        ORDER BY posts.timestamp DESC
+    ''', (f'%{category_name}%',)).fetchall()
+    
+    result = []
+    
+    for post in posts:
+        post_id = post[0]
+        
+        # コメントの取得
+        cur.execute('''
+            SELECT comments.content, comments.timestamp, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            WHERE comments.post_id = ?
+            ORDER BY comments.timestamp ASC
+        ''', (post_id,))
+        comments = cur.fetchall()
+
+        result.append({
+            'id': post[0],
+            'title': post[1],
+            'content': post[2],
+            'category': post[3],
+            'timestamp': post[4],
+            'image_path': post[5],
+            'username': post[6],
+            'user_id': post[7],
+            'like_count': post[8],
             'comments': comments
         })
     

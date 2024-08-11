@@ -26,6 +26,7 @@
     {% else %}
       {% for i in timelines %}
         <div class="post">
+          <h2>{{ i.title }}</h2>
           {{ i.content | linebreaks }}
           <p>カテゴリ: {{ i.category }}</p>
           {% if i.image_path %}
