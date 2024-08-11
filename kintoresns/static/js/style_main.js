@@ -32,3 +32,17 @@ function adjustLayout() {
 
 window.addEventListener('resize', adjustLayout);
 window.addEventListener('load', adjustLayout);
+
+// スクロール位置を保存する
+window.addEventListener("beforeunload", function () {
+    localStorage.setItem("scrollPosition", window.scrollY);
+  });
+
+  // スクロール位置を復元する
+  window.addEventListener("load", function () {
+    const scrollPosition = localStorage.getItem("scrollPosition");
+    if (scrollPosition) {
+      window.scrollTo(0, parseInt(scrollPosition));
+      localStorage.removeItem("scrollPosition"); // 一度復元したら削除
+    }
+  });
