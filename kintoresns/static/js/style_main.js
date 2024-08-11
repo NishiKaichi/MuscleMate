@@ -24,9 +24,9 @@ function adjustLayout() {
         const maxHeight = mainHeight - mainPaddingTop - mainPaddingBottom;
         postList.style.maxHeight = `${maxHeight}px`;
 
-        /*console.log(`Header height: ${headerHeight}px, Footer height: ${footerHeight}px, Main height set to: ${main.style.height}, Post-list max-height set to: ${postList.style.maxHeight}`);
+        console.log(`Header height: ${headerHeight}px, Footer height: ${footerHeight}px, Main height set to: ${main.style.height}, Post-list max-height set to: ${postList.style.maxHeight}`);
     } else {
-        console.log('Header, main, post-list, or footer not found');*/
+        console.log('Header, main, post-list, or footer not found');
     }
 }
 
