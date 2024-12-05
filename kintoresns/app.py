@@ -1,14 +1,15 @@
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from markupsafe import Markup
 import os, time
-import init_db
+import src.init_db as init_db
+import src.secret_key as secret_kay
 from datetime import datetime
-import sns_user as user, sns_data as data   
+import src.sns_user as user, src.sns_data as data   
 from werkzeug.utils import secure_filename
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
-app.secret_key = 'TIIDe5TUMtPUHpyu'
+app.secret_key = secret_kay.secret_kay()
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 

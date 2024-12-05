@@ -1,7 +1,7 @@
 from flask import session, redirect
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from sns_data import get_category_by_post_id
+from src.sns_data import get_category_by_post_id
 import sqlite3
 
 def get_db_connection():
