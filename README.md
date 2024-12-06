@@ -1,5 +1,5 @@
 # MuscleMate  
-##共同開発者  
+## 共同開発者  
 ・keita2315  
 ・kurage-1223  
 ・shinjio2170  
