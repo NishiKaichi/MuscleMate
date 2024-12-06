@@ -1,6 +1,6 @@
-# MuscleMate
-##共同開発者
-・@keita2315
+# MuscleMate  
+##共同開発者  
+・@keita2315  
 ・
 ・
 ・
