@@ -1,10 +1,11 @@
 # MuscleMate  
 ## 開発者  
-・[@NishiKaichi](https://github.com/NishiKaichi)
+・[@NishiKaichi](https://github.com/NishiKaichi)  
 ・[@keita2315](https://github.com/keita2315)  
 ・[@kurage-1223](https://github.com/Kurage-1223)  
 ・[@shinjio2170](https://github.com/shinjio2170)  
 ・[@makkiiiiiiiiii](https://github.com/makkiiiiiiiiii)  
+  
 ## 使用技術一覧  
 <img src="https://img.shields.io/badge/-Css3-1572B6.svg?logo=css3&style=plastic">
 <img src="https://img.shields.io/badge/-Html5-E34F26.svg?logo=html5&style=plastic">
@@ -13,7 +14,7 @@
 <img src="https://img.shields.io/badge/-Flask-000000.svg?logo=flask&style=plastic">
 <img src="https://img.shields.io/badge/-Github-181717.svg?logo=github&style=plastic">
 <img src="https://img.shields.io/badge/-Heroku-430098.svg?logo=heroku&style=plastic">  
-
+  
 ## ディレクトリ構成  
 <pre>
   └─kintoresns
@@ -27,23 +28,25 @@
     │  └─uploads
     └─templates
 </pre>
-
-
+  
 ## MuscleMateへのアクセス
 [MuscleMateのログイン画面](https://musclemate-106140613dcd.herokuapp.com/)(現在公開停止中です)  
-
-
+  
 ## 概要  
 MuscleMateは筋トレ情報の交換に特化したSNSです。  
+  
 ### ログインページ
 アクセスするとはじめにログイン画面に移動します。このページでは自分のユーザーネームとパスワードを入力してログインします。  
 自分のアカウントを持っていない、もしくは新たなアカウントを作りたい場合は下のアカウント作成に移動してください。 
 ![MuscleMateのログイン画面](https://github.com/user-attachments/assets/3cfe4e71-7bba-4dec-bd9a-14b454a7b263)  
+  
 ### アカウント作成ページ  
 アカウント作成ページでは任意のユーザーネームとパスワードを入力しアカウントを作成します。なお、ユーザーネームが既に登録済みの場合は重複して登録できませんので別のユーザーネームを使用してください。  
+  
 ### メインページ  
 ログインに成功するとメインページに移動します。メインページではすべてのトレーニーの投稿が表示されているタイムラインがあります。  
 ![MuscleMateのメインページ](https://github.com/user-attachments/assets/e1f61336-b175-4524-b62e-df6a9f067a4f)  
+  
 #### 上部メニュー
 ・投稿フォームへの移動  
 ・フォロー中ユーザーの確認  
@@ -56,6 +59,7 @@ MuscleMateは筋トレ情報の交換に特化したSNSです。
 ・投稿フォームへの移動  
 ・通知確認(いいね、コメント通知)  
 ### 投稿フォーム  
+![投稿フォーム](https://github.com/user-attachments/assets/676e915e-5ef4-42f0-a54a-d08a785d6032)
 
 
 
